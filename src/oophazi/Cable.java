@@ -54,4 +54,10 @@ public class Cable implements Serializable {
         return socketTo;
     }
 
+    /**
+     *
+     * @return Forrás aljzat
+     */
+    public Socket getSocketFrom(){ return socketFrom;}
+
 }
