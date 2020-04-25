@@ -135,4 +135,20 @@ public abstract class Device implements Serializable {
     public void setIsValidData(boolean b){
         isValidData = b;
     }
+
+    /**
+     *
+     * @return inputSockets
+     */
+    public ArrayList<Socket> getInputSockets() {
+        return inputSockets;
+    }
+
+    /**
+     *
+     * @return outputSockets
+     */
+    public ArrayList<Socket> getOutputSockets() {
+        return outputSockets;
+    }
 }
