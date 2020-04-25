@@ -8,134 +8,131 @@ import java.util.*;
 public abstract class Device implements Serializable {
 
     /**
+     * Az eszközben lévő aktuális adatok
+     */
+    private ArrayList<Data> storedDatas;
+
+    /**
+     * Az eszköz bemeneti aljzatai
+     */
+    private ArrayList<Socket> inputSockets;
+
+    /**
+     * Az eszköz kimeneti aljzatai
+     */
+    private ArrayList<Socket> outputSockets;
+
+    /**
+     * Az eszköz neve
+     */
+    private String name;
+
+    /**
+     * Egy igaz/hamis típusú változó, ami jelzi, hogy már tovább küldte e az adatait.
+     */
+    private boolean isValidData;
+
+
+    public boolean getIsValidData(){
+        return  isValidData;
+    }
+    /**
      * Default constructor
      */
     public Device() {
     }
 
     /**
-     * 
+     *
+     * @param name Eszköz név
      */
-    private ArrayList<Socket> storedDatas;
+    public Device(String name){
+        this.name=name;
+    }
 
 
     /**
-     * 
+     *
+     * @return Szabad bemeneti socket
      */
-    private ArrayList<Socket> inputSockets;
-
-    /**
-     * 
-     */
-    private ArrayList<Socket> outputSockets;
-
-    /**
-     * 
-     */
-    private String name;
-
-    /**
-     * 
-     */
-    private boolean validData;
-
-
-
-
-    /**
-     * @param device Eszköz amely kimenettel rendelkezik
-     */
-    public void connectInputDevice(Device device) {
-        // TODO implement here
+    private Socket getFreeInputSocket(){
+        for (Socket socket : inputSockets) {
+            if (socket.getCable() == null) {
+                return socket;
+            }
+        }
+        return null; //TODO: ERROR
     }
 
     /**
-     * @param device Eszköz amely csatlakoztatva van a kimenetre
+     *
+     * @return Szabad kimeneti socket
      */
-    public void disconnectInputDevice(Device device) {
-        // TODO implement here
+    private Socket getFreeOutputSocket(){
+        for (Socket socket : inputSockets) {
+            if (socket.getCable() == null) {
+                return socket;
+            }
+        }
+        return null; //TODO: ERROR
     }
 
-    /**
-     * @param device Eszköz, amely rendelkezik bemenettel
-     */
-    public void connectOutputDevice(Device device) {
-        // TODO implement here
-    }
-
-    /**
-     * @param device Eszköz, amely csatlakoztatva van az egyik kimenetre
-     */
-    public void disconnectOutputDevice(Device device) {
-        // TODO implement here
-    }
-
-    /**
-     * 
-     */
-    public void disconnectAllInputDevices() {
-        // TODO implement here
-    }
-
-    /**
-     * 
-     */
-    public void disconnectAllOutputDevices() {
-        // TODO implement here
-    }
-
-    /**
-     * 
-     */
-    public void disconnectAllDevices() {
-        // TODO implement here
-    }
 
     /**
      * @return name
      */
     public String getName() {
-        // TODO implement here
-        return "";
+        return name;
     }
 
     /**
      * 
      */
     public void send() {
-        // TODO implement here
+        for (Data data:
+             storedDatas) {
+            for (Socket socket:
+                 outputSockets) {
+                if(socket != null){
+                    socket.getCable().send();
+                }
+            }
+        }
     }
 
     /**
      * @param data Fogadandó adat
      */
     public void receive(Data data) {
-        // TODO implement here
+        storedDatas.add(data);
+        if(canSend()){
+            send();
+        }
     }
 
     /**
-     * @param name Az eszköz neve
+     *
+     * @return Minden inputba csatalakoztatott eszköz elkészült e már a küldéssel
      */
-    public Device(String name) {
-        // TODO implement here
+    private boolean canSend(){
+        for (Socket socket:
+                inputSockets) {
+            if(!socket.getCable().getSocketFrom().getOwner().getIsValidData()){
+                return false;
+            }
+        }
+        return true;
     }
 
-    /**
-     * 
-     */
-    public void Operation1() {
-        // TODO implement here
-    }
 
     /**
      * @return storedDatas
      */
     public ArrayList<Data> getStoredDatas() {
-        // TODO implement here
-        return null;
+        return storedDatas;
     }
 
-    public void setValidData(boolean b){
-        validData = b;
+    public void setIsValidData(boolean b){
+        isValidData = b;
     }
 }
