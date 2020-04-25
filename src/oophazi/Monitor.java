@@ -9,15 +9,13 @@ public class Monitor extends Device {
     /**
      * Default constructor
      */
-    public Monitor() {
+    public Monitor(String name) {
+        super(name);
+        getInputSockets().add(new Socket(this));
+
     }
 
 
-    /**
-     * 
-     */
-    public void getData() {
-        // TODO implement here
-    }
+
 
 }
