@@ -1,10 +1,11 @@
 package oophazi;
+import java.io.Serializable;
 import java.util.*;
 
 /**
  * 
  */
-public class Socket {
+public class Socket implements Serializable {
 
     /**
      * Default constructor

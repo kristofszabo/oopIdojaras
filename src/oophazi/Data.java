@@ -1,10 +1,11 @@
 package oophazi;
+import java.io.Serializable;
 import java.util.*;
 
 /**
  * 
  */
-public class Data {
+public class Data implements Serializable {
 
     /**
      * Default constructor

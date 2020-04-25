@@ -1,10 +1,11 @@
 package oophazi;
+import java.io.Serializable;
 import java.util.*;
 
 /**
  * 
  */
-public class Cable {
+public class Cable implements Serializable {
 
     /**
      * Output socket
