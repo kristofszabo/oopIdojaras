@@ -42,7 +42,7 @@ public class Cable implements Serializable {
              datas) {
             socketTo.getOwner().receive(data);
         }
-        socketFrom.getOwner().setValidData(true);
+        socketFrom.getOwner().setIsValidData(true);
 
     }
 
