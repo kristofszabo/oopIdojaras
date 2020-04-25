@@ -13,6 +13,14 @@ public class Socket implements Serializable {
     public Socket() {
     }
 
+    /**
+     *
+     * @param device A socketet birtokló eszköz
+     */
+    public Socket(Device device){
+        this.owner = device;
+    }
+
 
     /**
      * 
@@ -24,30 +32,25 @@ public class Socket implements Serializable {
      */
     private Device owner;
 
-
-
-
     /**
      * @return owner
      */
     public Device getOwner() {
-        // TODO implement here
-        return null;
+        return owner;
     }
 
     /**
      * @param cable Kábel beállító
      */
     public void setCable(Cable cable) {
-        // TODO implement here
+        this.cable = cable;
     }
 
     /**
      * @return Vissza adja a sockethez tartozó kábelt
      */
     public Cable getCable() {
-        // TODO implement here
-        return null;
+        return cable;
     }
 
 }
