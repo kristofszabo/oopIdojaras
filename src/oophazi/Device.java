@@ -134,4 +134,7 @@ public abstract class Device {
         return null;
     }
 
+    public void setValidData(boolean b){
+        validData = b;
+    }
 }
