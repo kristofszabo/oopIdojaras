@@ -30,23 +30,28 @@ public abstract class Device implements Serializable {
     /**
      * Egy igaz/hamis típusú változó, ami jelzi, hogy már tovább küldte e az adatait.
      */
-    private boolean isValidData;
+    private boolean isValidData = false;
 
+    /**
+     * Default constructor
+     */
+    private Device() {
+        storedDatas = new ArrayList<>();
+        inputSockets = new ArrayList<>();
+        outputSockets = new ArrayList<>();
+    }
 
     public boolean getIsValidData(){
         return  isValidData;
     }
-    /**
-     * Default constructor
-     */
-    public Device() {
-    }
+
 
     /**
      *
      * @param name Eszköz név
      */
     public Device(String name){
+        this();
         this.name=name;
     }
 
