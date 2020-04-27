@@ -60,7 +60,7 @@ public abstract class Device implements Serializable {
      *
      * @return Szabad bemeneti socket
      */
-    private Socket getFreeInputSocket(){
+    public Socket getFreeInputSocket(){
         for (Socket socket : inputSockets) {
             if (socket.getCable() == null) {
                 return socket;
@@ -73,7 +73,7 @@ public abstract class Device implements Serializable {
      *
      * @return Szabad kimeneti socket
      */
-    private Socket getFreeOutputSocket(){
+    public Socket getFreeOutputSocket(){
         for (Socket socket : inputSockets) {
             if (socket.getCable() == null) {
                 return socket;
