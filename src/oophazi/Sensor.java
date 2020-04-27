@@ -8,11 +8,7 @@ import java.util.*;
  */
 public abstract class Sensor extends Device {
 
-    /**
-     * Default constructor
-     */
-    public Sensor() {
-    }
+
 
     /**
      * 
@@ -24,7 +20,12 @@ public abstract class Sensor extends Device {
      */
     private Data currentData;
 
-
+    /**
+     * @param name Eszköz név
+     */
+    public Sensor(String name) {
+        super(name);
+    }
 
 
     /**

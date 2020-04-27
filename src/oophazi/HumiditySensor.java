@@ -6,11 +6,11 @@ import java.util.*;
  */
 public class HumiditySensor extends Sensor {
 
+
     /**
-     * Default constructor
+     * @param name Eszköz név
      */
-    public HumiditySensor() {
+    public HumiditySensor(String name) {
+        super(name);
     }
-
-
 }

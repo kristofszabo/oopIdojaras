@@ -6,11 +6,11 @@ import java.util.*;
  */
 public class TemperatureSensor extends Sensor {
 
+
     /**
-     * Default constructor
+     * @param name Eszköz név
      */
-    public TemperatureSensor() {
+    public TemperatureSensor(String name) {
+        super(name);
     }
-
-
 }

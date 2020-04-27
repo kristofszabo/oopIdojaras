@@ -6,11 +6,11 @@ import java.util.*;
  */
 public class WindforceSensor extends Sensor {
 
+
     /**
-     * Default constructor
+     * @param name Eszköz név
      */
-    public WindforceSensor() {
+    public WindforceSensor(String name) {
+        super(name);
     }
-
-
 }
