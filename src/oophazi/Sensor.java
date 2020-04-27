@@ -32,22 +32,16 @@ public abstract class Sensor extends Device {
      * @return Vissza adja a jelenlegi Adatot, amit tartalmaz
      */
     public Data getData() {
-        // TODO implement here
-        return null;
+        return currentData;
     }
 
     /**
      * @param data Átállítja a jellenlegi adatot, amit tartalmaz
      */
     public void setData(Data data) {
-        // TODO implement here
+        this.currentData = data;
     }
 
-    /**
-     * Továbbítja a kapott adatot
-     */
-    public void send() {
-        // TODO implement here
-    }
+
 
 }
