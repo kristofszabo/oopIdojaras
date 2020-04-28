@@ -138,6 +138,20 @@ public abstract class Device implements Serializable {
         return true;
     }
 
+    public boolean canShowData(){
+        return false;
+    }
+
+    public ArrayList<Data> getStoredDataBetweenDates(Date dateFrom, Date dateTo){
+        ArrayList<Data> datas=new ArrayList<>();
+        for (Data data:
+             storedDatas) {
+            if(data.getMeasuredTime().after(dateFrom)&& data.getMeasuredTime().before(dateTo)){
+                datas.add(data);
+            }
+        }
+        return datas;
+    }
 
     /**
      * @return storedDatas
