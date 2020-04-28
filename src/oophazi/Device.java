@@ -7,6 +7,12 @@ import java.util.*;
  */
 public abstract class Device implements Serializable {
 
+
+    private int inputSocketNumber;
+
+    private int outputSocketNumber;
+
+
     /**
      * Az eszközben lévő aktuális adatok
      */
@@ -15,12 +21,12 @@ public abstract class Device implements Serializable {
     /**
      * Az eszköz bemeneti aljzatai
      */
-    private ArrayList<Socket> inputSockets;
+    private Socket[] inputSockets;
 
     /**
      * Az eszköz kimeneti aljzatai
      */
-    private ArrayList<Socket> outputSockets;
+    private Socket[] outputSockets;
 
     /**
      * Az eszköz neve
@@ -37,8 +43,6 @@ public abstract class Device implements Serializable {
      */
     private Device() {
         storedDatas = new ArrayList<>();
-        inputSockets = new ArrayList<>();
-        outputSockets = new ArrayList<>();
     }
 
     public boolean getIsValidData(){
@@ -50,9 +54,14 @@ public abstract class Device implements Serializable {
      *
      * @param name Eszköz név
      */
-    public Device(String name){
+    public Device(String name, int inputSocketNumber, int outputSocketNumber){
         this();
         this.name=name;
+        this.inputSocketNumber= inputSocketNumber;
+        this.outputSocketNumber = outputSocketNumber;
+        outputSockets = new Socket[outputSocketNumber];
+        inputSockets = new Socket[inputSocketNumber];
+
     }
 
 
@@ -145,7 +154,7 @@ public abstract class Device implements Serializable {
      *
      * @return inputSockets
      */
-    public ArrayList<Socket> getInputSockets() {
+    public Socket[] getInputSockets() {
         return inputSockets;
     }
 
@@ -153,7 +162,7 @@ public abstract class Device implements Serializable {
      *
      * @return outputSockets
      */
-    public ArrayList<Socket> getOutputSockets() {
+    public Socket[] getOutputSockets() {
         return outputSockets;
     }
 }

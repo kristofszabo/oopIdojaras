@@ -10,8 +10,8 @@ public class Monitor extends Device {
      * Default constructor
      */
     public Monitor(String name) {
-        super(name);
-        getInputSockets().add(new Socket(this));
+        super(name,1,0);
+
 
     }
 

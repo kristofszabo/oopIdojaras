@@ -4,12 +4,13 @@ import java.util.*;
 /**
  * 
  */
-public class RainSensor {
+public class RainSensor extends Sensor{
 
     /**
      * Default constructor
      */
-    public RainSensor() {
+    public RainSensor(String name) {
+        super(name);
     }
 
 

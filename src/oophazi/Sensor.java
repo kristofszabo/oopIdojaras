@@ -24,7 +24,7 @@ public abstract class Sensor extends Device {
      * @param name Eszköz név
      */
     public Sensor(String name) {
-        super(name);
+        super(name,0,1);
     }
 
 
