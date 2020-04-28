@@ -15,7 +15,8 @@ public class Monitor extends Device {
 
     }
 
-
-
-
+    @Override
+    public boolean canShowData() {
+        return true;
+    }
 }
