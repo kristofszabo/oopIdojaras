@@ -22,6 +22,7 @@ public class FileManager {
     public void save(String fileName) throws IOException {
         ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fileName));
         oos.writeObject(modelManager);
+        oos.close();
     }
 
     /**

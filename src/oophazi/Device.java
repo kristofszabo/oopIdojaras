@@ -50,7 +50,7 @@ public abstract class Device implements Serializable {
     }
 
 
-    /**
+    /**Eszköz létrehozo konstruktor
      *
      * @param name Eszköz név
      */
@@ -65,7 +65,7 @@ public abstract class Device implements Serializable {
     }
 
 
-    /**
+    /**Szabad bemeneti socket kérése
      *
      * @return Szabad bemeneti socket
      */
@@ -78,7 +78,7 @@ public abstract class Device implements Serializable {
         return null; //TODO: ERROR
     }
 
-    /**
+    /** Szabad kimeneti socket lekérése
      *
      * @return Szabad kimeneti socket
      */
@@ -112,6 +112,20 @@ public abstract class Device implements Serializable {
                 }
             }
         }
+        isValidData=true;
+        broadcastFinish();
+
+
+    }
+
+    public void broadcastFinish(){
+        for (Socket socket :
+                outputSockets) {
+            var notifiedOwner = socket.getCable().getSocketTo().getOwner();
+            if(notifiedOwner.canSend()){
+                notifiedOwner.send();
+            }
+        }
     }
 
     /**
@@ -119,16 +133,13 @@ public abstract class Device implements Serializable {
      */
     public void receive(Data data) {
         storedDatas.add(data);
-        if(canSend()){
-            send();
-        }
     }
 
     /**
      *
      * @return Minden inputba csatalakoztatott eszköz elkészült e már a küldéssel
      */
-    private boolean canSend(){
+    public boolean canSend(){
         for (Socket socket:
                 inputSockets) {
             if(!socket.getCable().getSocketFrom().getOwner().getIsValidData()){
@@ -141,6 +152,8 @@ public abstract class Device implements Serializable {
     public boolean canShowData(){
         return false;
     }
+
+    public boolean canDetectChange
 
     public ArrayList<Data> getStoredDataBetweenDates(Date dateFrom, Date dateTo){
         ArrayList<Data> datas=new ArrayList<>();
