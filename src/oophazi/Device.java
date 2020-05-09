@@ -60,8 +60,13 @@ public abstract class Device implements Serializable {
         this.inputSocketNumber= inputSocketNumber;
         this.outputSocketNumber = outputSocketNumber;
         outputSockets = new Socket[outputSocketNumber];
+        for(int i = 0; i<outputSockets.length;++i){
+            outputSockets[i]=new Socket();
+        }
         inputSockets = new Socket[inputSocketNumber];
-
+        for(int i = 0; i<inputSockets.length;++i){
+            inputSockets[i]=new Socket();
+        }
     }
 
 
@@ -153,7 +158,9 @@ public abstract class Device implements Serializable {
         return false;
     }
 
-    public boolean canDetectChange
+    public boolean canDetectChange(){
+        return true;//TODO
+    }
 
     public ArrayList<Data> getStoredDataBetweenDates(Date dateFrom, Date dateTo){
         ArrayList<Data> datas=new ArrayList<>();
