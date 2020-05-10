@@ -1,19 +1,41 @@
 package oophazi;
+import oophazi.exceptions.CableNotFoundException;
+import oophazi.exceptions.NoFreeInputSocketException;
+import oophazi.exceptions.NoFreeOutputSocketException;
+
+import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
  * 
  */
-public class ModelManager {
+public class ModelManager implements Serializable {
 
-    ArrayList<Device> devices;
-    ArrayList<Cable> cables;
+    private ArrayList<Device> devices;
+    private ArrayList<Sensor> sensors;
+    private ArrayList<Monitor> monitors;
+
+    private ArrayList<Cable> cables;
+
+
+    private LocalDateTime localDateTime = LocalDateTime.now();
+
+    public LocalDateTime getLocalDateTime() {
+        return localDateTime;
+    }
+
+    public void setLocalDateTime(LocalDateTime localDateTime) {
+        this.localDateTime = localDateTime;
+    }
 
     /**
      * Default constructor
      */
     public ModelManager() {
         devices = new ArrayList<>();
+        monitors = new ArrayList<>();
+        sensors = new ArrayList<>();
         cables = new ArrayList<>();
     }
 
@@ -37,7 +59,7 @@ public class ModelManager {
      * @param from Az eszköz neve amely kimenetéhez csatlakozik a to
      * @param to Az eszköz neve amely bemenetére csatolja a from-t
      */
-    public void addCable(String from, String to) {
+    public void addCable(String from, String to) throws NoFreeInputSocketException {
         Cable cable = new Cable(findDeviceByName(from).getFreeOutputSocket(), findDeviceByName(to).getFreeInputSocket());
         cables.add(cable);
     }
@@ -46,7 +68,7 @@ public class ModelManager {
      * @param from Az eszköz amelyből kimegy a kábel
      * @param to Az eszköz amelybe bemegy a kábel
      */
-    public void removeCable(String from, String to) {
+    public void removeCable(String from, String to) throws CableNotFoundException {
         Device fromDevice = findDeviceByName(from);
         Device toDevice = findDeviceByName(to);
         for (int i = 0; i < cables.size(); ++i){
@@ -58,7 +80,7 @@ public class ModelManager {
                 return;
             }
         }
-        //TODO: ERROR
+        throw new CableNotFoundException();
     }
 
 
@@ -67,7 +89,13 @@ public class ModelManager {
      * @param sensor Az érzékelő amelyet hozzá akarjuk adni a modellhez.
      */
     public void addSensor(Sensor sensor) {
-        devices.add(sensor);
+        addDevice(sensor);
+        sensors.add(sensor);
+    }
+
+    public void addMonitor(Monitor monitor){
+        addDevice(monitor);
+        monitors.add(monitor);
     }
 
     /**
@@ -81,15 +109,48 @@ public class ModelManager {
      * @param deviceName Az eszköz neve amelyet eltávolít a modellből.
      */
     public void removeDevice(String deviceName) {
-        for (int i = 0; i < devices.size(); i++) {
-            Device device = devices.get(i);
-            if(device.getName().equals(deviceName)){
-                devices.remove(i);
-                return;
-            }
-        }
+        Device device = findDeviceByName(deviceName);
+        devices.remove(device);
+        sensors.remove(device);
+        monitors.remove(device);
         //TODO: ERROR
     }
 
+    @Override
+    public String toString() {
+        return "ModelManager{" +
+                "devices=" + devices +
+                ", cables=" + cables +
+                '}';
+    }
 
+    public void step() {
+        for(Sensor s: sensors){
+            s.send();
+        }
+        for (Device d:
+             devices) {
+            d.setIsValidData(false);
+        }
+    }
+
+    public Monitor findMonitorByName(String name){
+        for (Monitor monitor:
+             monitors) {
+            if(monitor.getName().equals(name)){
+                return monitor;
+            }
+        }
+        return null;
+    }
+
+    public Sensor findSensorByName(String name){
+        for (Sensor sensor:
+                sensors) {
+            if(sensor.getName().equals(name)){
+                return sensor;
+            }
+        }
+        return null;
+    }
 }
