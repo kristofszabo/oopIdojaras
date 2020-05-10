@@ -29,7 +29,7 @@ public class FileManager {
      * @param filename A betöltendő file neve
      * @return A betöltött ModelManager példány
      */
-    public ModelManager load(String filename) throws IOException, ClassNotFoundException {
+    public static ModelManager load(String filename) throws IOException, ClassNotFoundException {
         ObjectInputStream oin = new ObjectInputStream(new FileInputStream(filename));
         return (ModelManager) oin.readObject();
     }
