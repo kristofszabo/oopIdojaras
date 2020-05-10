@@ -1,4 +1,7 @@
 package oophazi;
+import oophazi.exceptions.NoFreeInputSocketException;
+import oophazi.exceptions.NoFreeOutputSocketException;
+
 import java.io.Serializable;
 import java.util.*;
 
@@ -61,11 +64,11 @@ public abstract class Device implements Serializable {
         this.outputSocketNumber = outputSocketNumber;
         outputSockets = new Socket[outputSocketNumber];
         for(int i = 0; i<outputSockets.length;++i){
-            outputSockets[i]=new Socket();
+            outputSockets[i]=new Socket(this);
         }
         inputSockets = new Socket[inputSocketNumber];
         for(int i = 0; i<inputSockets.length;++i){
-            inputSockets[i]=new Socket();
+            inputSockets[i]=new Socket(this);
         }
     }
 
@@ -74,26 +77,26 @@ public abstract class Device implements Serializable {
      *
      * @return Szabad bemeneti socket
      */
-    public Socket getFreeInputSocket(){
+    public Socket getFreeInputSocket() throws NoFreeInputSocketException {
         for (Socket socket : inputSockets) {
             if (socket.getCable() == null) {
                 return socket;
             }
         }
-        return null; //TODO: ERROR
+        throw new NoFreeInputSocketException();
     }
 
     /** Szabad kimeneti socket lekérése
      *
      * @return Szabad kimeneti socket
      */
-    public Socket getFreeOutputSocket(){
+    public Socket getFreeOutputSocket() throws NoFreeOutputSocketException {
         for (Socket socket : inputSockets) {
             if (socket.getCable() == null) {
                 return socket;
             }
         }
-        return null; //TODO: ERROR
+        throw new NoFreeOutputSocketException();
     }
 
 
@@ -102,6 +105,10 @@ public abstract class Device implements Serializable {
      */
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     /**
@@ -198,5 +205,18 @@ public abstract class Device implements Serializable {
      */
     public Socket[] getOutputSockets() {
         return outputSockets;
+    }
+
+    @Override
+    public String toString() {
+        return "Device{" +
+                "inputSocketNumber=" + inputSocketNumber +
+                ", outputSocketNumber=" + outputSocketNumber +
+                ", storedDatas=" + storedDatas +
+                ", inputSockets=" + Arrays.toString(inputSockets) +
+                ", outputSockets=" + Arrays.toString(outputSockets) +
+                ", name='" + name + '\'' +
+                ", isValidData=" + isValidData +
+                '}';
     }
 }
