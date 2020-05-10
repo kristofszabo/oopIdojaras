@@ -9,6 +9,6 @@ public class ExitCommand extends Command {
 
     @Override
     public void action(ModelManager modelManager, String[] cmd) {
-
+        System.exit(0);
     }
 }

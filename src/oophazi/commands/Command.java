@@ -2,6 +2,8 @@ package oophazi.commands;
 
 import oophazi.ModelManager;
 
+import java.io.IOException;
+
 public abstract class Command {
     private String name;
 

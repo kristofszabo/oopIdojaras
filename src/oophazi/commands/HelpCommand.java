@@ -9,6 +9,6 @@ public class HelpCommand extends Command {
 
     @Override
     public void action(ModelManager modelManager, String[] cmd) {
-
+        System.out.println("HELP");//TODO: Help leírás
     }
 }

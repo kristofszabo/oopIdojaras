@@ -9,6 +9,7 @@ public class StepCommand extends Command{
 
     @Override
     public void action(ModelManager modelManager, String[] cmd) {
+        modelManager.step();
 
     }
 }
