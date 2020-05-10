@@ -6,7 +6,7 @@ import oophazi.Monitor;
 public class MonitorCreator extends DeviceCreator{
 
     @Override
-    public Device create(String name) {
+    public Monitor create(String name) {
         return new Monitor(name);
     }
 }
