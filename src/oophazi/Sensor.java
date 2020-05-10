@@ -15,10 +15,8 @@ public abstract class Sensor extends Device {
      */
     public Device device;
 
-    /**
-     * 
-     */
-    private Data currentData;
+
+    private String measure;
 
     /**
      * @param name Eszköz név
@@ -27,20 +25,6 @@ public abstract class Sensor extends Device {
         super(name,0,1);
     }
 
-
-    /**
-     * @return Vissza adja a jelenlegi Adatot, amit tartalmaz
-     */
-    public Data getData() {
-        return currentData;
-    }
-
-    /**
-     * @param data Átállítja a jellenlegi adatot, amit tartalmaz
-     */
-    public void setData(Data data) {
-        this.currentData = data;
-    }
 
 
 
