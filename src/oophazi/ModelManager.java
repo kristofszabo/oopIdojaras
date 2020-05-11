@@ -10,6 +10,22 @@ import java.util.*;
  */
 public class ModelManager implements Serializable {
 
+    public ArrayList<Device> getDevices() {
+        return devices;
+    }
+
+    public ArrayList<Sensor> getSensors() {
+        return sensors;
+    }
+
+    public ArrayList<Monitor> getMonitors() {
+        return monitors;
+    }
+
+    public ArrayList<Cable> getCables() {
+        return cables;
+    }
+
     /**
      * Az összes modellben megtalálható eszköz
      */
