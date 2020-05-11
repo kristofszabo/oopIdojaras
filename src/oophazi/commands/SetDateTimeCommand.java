@@ -6,6 +6,9 @@ import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+/**
+ * Aktuális időt beállító menü command
+ */
 public class SetDateTimeCommand extends Command {
     public SetDateTimeCommand() {
         super("setdatetime");

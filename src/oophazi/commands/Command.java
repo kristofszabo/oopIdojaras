@@ -4,6 +4,9 @@ import oophazi.ModelManager;
 
 import java.io.IOException;
 
+/**
+ * Osztály minta egy commandhoz
+ */
 public abstract class Command {
     private String name;
 

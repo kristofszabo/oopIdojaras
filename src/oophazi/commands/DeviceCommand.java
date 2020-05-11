@@ -7,6 +7,7 @@ import oophazi.creator.*;
 import oophazi.exceptions.DeviceNotFoundException;
 import oophazi.exceptions.MonitorNotConnectedException;
 import oophazi.exceptions.MonitorNotFoundException;
+import oophazi.exceptions.NameCollisionException;
 
 import java.awt.datatransfer.SystemFlavorMap;
 import java.text.DateFormat;
@@ -56,7 +57,7 @@ public class DeviceCommand extends Command {
             try {
                 System.out.println(modelManager.findDeviceByName(cmd[2]));
             } catch (DeviceNotFoundException e) {
-                e.printStackTrace();
+                System.err.println(e.getMessage());
             }
         }
     }
@@ -86,6 +87,12 @@ public class DeviceCommand extends Command {
 
             monitorCreatorHashMap.put("Monitor", new MonitorCreator());
         }
+
+        /**
+         * Eszköz típusa alapján hozzá adja a megfelelő listához
+         * @param modelManager a model amin végzi a műveletet
+         * @param cmd a bemeneti parancs
+         */
         @Override
         public void action(ModelManager modelManager, String[] cmd) {
             if(
@@ -93,14 +100,18 @@ public class DeviceCommand extends Command {
                     monitorCreatorHashMap.containsKey(cmd[2]) |
                     sensorCreatorHashMap.containsKey(cmd[2])){
 
-
-                if(cmd[2].contains("Sensor")){
-                    modelManager.addSensor(sensorCreatorHashMap.get(cmd[2]).create(cmd[3]));
-                }else if(cmd[2].contains("Monitor")){
-                    modelManager.addMonitor(monitorCreatorHashMap.get(cmd[2]).create(cmd[3]));
-                }else if(cmd[2].contains("Data")){
-                    modelManager.addDevice(deviceCreatorHashMap.get(cmd[2]).create(cmd[3]));
+                try{
+                    if(cmd[2].contains("Sensor")){
+                        modelManager.addSensor(sensorCreatorHashMap.get(cmd[2]).create(cmd[3]));
+                    }else if(cmd[2].contains("Monitor")){
+                        modelManager.addMonitor(monitorCreatorHashMap.get(cmd[2]).create(cmd[3]));
+                    }else if(cmd[2].contains("Data")){
+                        modelManager.addDevice(deviceCreatorHashMap.get(cmd[2]).create(cmd[3]));
+                    }
+                }catch (NameCollisionException e) {
+                    System.err.println(e.getMessage());
                 }
+
             }
 
         }
@@ -116,13 +127,18 @@ public class DeviceCommand extends Command {
             super("remove");
         }
 
+        /**Eltávolítja az adott névvel rendelkező eszközt
+         *
+         * @param modelManager model amin végzi a műveletet
+         * @param cmd a bemeneti parancs
+         */
         @Override
         public void action(ModelManager modelManager, String[] cmd) {
 
             try {
                 modelManager.removeDevice(cmd[2]);
             } catch (DeviceNotFoundException e) {
-                System.out.println(e.getMessage());
+                System.err.println(e.getMessage());
             }
         }
     }
@@ -136,15 +152,19 @@ public class DeviceCommand extends Command {
             super("update");
         }
 
+        /**Átnevez egy eszközt
+         *
+         * @param modelManager a model amin a műveletet akarjuk elvégezni
+         * @param cmd a bemeneti parancs
+         */
         @Override
         public void action(ModelManager modelManager, String[] cmd) {
-            Device device = null;
             try {
-                device = modelManager.findDeviceByName(cmd[2]);
-            } catch (DeviceNotFoundException e) {
-                e.printStackTrace();
+                modelManager.updateDeviceName(cmd[2],cmd[3]);
+            } catch (DeviceNotFoundException | NameCollisionException e) {
+                System.err.println(e.getMessage());
             }
-            device.setName(cmd[3]);
+
         }
     }
 
@@ -157,6 +177,12 @@ public class DeviceCommand extends Command {
             super("filter");
         }
 
+        /**
+         * Ki írja a monitorhoz tartozó adatokat
+         *
+         * @param modelManager A model amin a művelet elvégződik
+         * @param cmd A bemeneti parancs
+         */
         @Override
         public void action(ModelManager modelManager, String[] cmd) {
             if(cmd.length <4){
@@ -167,14 +193,14 @@ public class DeviceCommand extends Command {
                 String[] from = cmd[3].split("\\.");
                 LocalDateTime dateFrom = LocalDateTime.of(Integer.parseInt(from[0]), Integer.parseInt(from[1]), Integer.parseInt(from[2]), 0, 0);
                 String[] to = cmd[4].split("\\.");
-                LocalDateTime dateTo = LocalDateTime.of(Integer.parseInt(to[0]), Integer.parseInt(to[1]), Integer.parseInt(to[2]), 0, 0);
+                LocalDateTime dateTo = LocalDateTime.of(Integer.parseInt(to[0]), Integer.parseInt(to[1]), Integer.parseInt(to[2]), 23, 59);
 
                 Monitor monitor = modelManager.findMonitorByName(cmd[2]);
                 System.out.println(monitor.getStoredDataBetweenDates(dateFrom,dateTo));
             } catch (MonitorNotFoundException | MonitorNotConnectedException e) {
-                System.out.println("A monitor nem található, vagy nincs csatlakoztatva semmilyen bemeneti eszközhöz");
+                System.err.println(e.getMessage());
             }catch (DateTimeException e){
-
+                System.err.println(e.getMessage());
             }
         }
     }

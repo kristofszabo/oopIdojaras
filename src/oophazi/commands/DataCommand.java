@@ -8,6 +8,9 @@ import oophazi.exceptions.SensorNotFoundException;
 
 import java.util.HashMap;
 
+/**
+ * Osztály a data commandhoz
+ */
 public class DataCommand extends Command {
     public DataCommand() {
         super("Data");
@@ -17,12 +20,17 @@ public class DataCommand extends Command {
     }
     HashMap<String, Command> commandHashMap;
 
+    /**
+     * Kiválassza a data almenüjét
+     * @param modelManager az aktuális model, amin dolgozik
+     * @param cmd a bemeneti parancs
+     */
     @Override
     public void action(ModelManager modelManager, String[] cmd) {
         if(commandHashMap.containsKey(cmd[1])){
             commandHashMap.get(cmd[1]).action(modelManager,cmd);
         }else{
-            System.out.println("Nincs ilyen másodlagos menüje a data menünek");
+            System.err.println("Nincs ilyen másodlagos menüje a data menünek");
         }
     }
 
@@ -32,13 +40,20 @@ public class DataCommand extends Command {
             super("set");
         }
 
+
+        /**
+         * Adat beállítása egy szenzor számára
+         * @param modelManager az aktuális modell amin dolgozik
+         * @param cmd a bemeneti parancs
+         */
         @Override
         public void action(ModelManager modelManager, String[] cmd) {
             Sensor sensor = null;
             try {
                 sensor = modelManager.findSensorByName(cmd[2]);
             } catch (SensorNotFoundException e) {
-                System.out.println("A keresett sensor nem található");
+                System.err.println(e.getMessage());
+                return;
             }
             sensor.receive(new Data(sensor,Double.parseDouble(cmd[3])));
         }

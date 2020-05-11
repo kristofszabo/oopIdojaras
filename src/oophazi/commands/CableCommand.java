@@ -4,9 +4,13 @@ import oophazi.ModelManager;
 import oophazi.exceptions.CableNotFoundException;
 import oophazi.exceptions.DeviceNotFoundException;
 import oophazi.exceptions.NoFreeInputSocketException;
+import oophazi.exceptions.NoFreeOutputSocketException;
 
 import java.util.HashMap;
 
+/**
+ * Osztály a cable commandhoz
+ */
 public class CableCommand extends Command {
     HashMap<String,Command> commandHashMap;
     public CableCommand() {
@@ -16,32 +20,54 @@ public class CableCommand extends Command {
         commandHashMap.put("remove", new RemoveCommand());
     }
 
+    /**
+     * Kábel almenü választás
+     * @param modelManager a model, amin dolgozik
+     * @param cmd a bemeneti parancs
+     */
     @Override
     public void action(ModelManager modelManager, String[] cmd) {
         commandHashMap.get(cmd[1]).action(modelManager, cmd);
     }
 
+    /**
+     * Kábel hozzá adás command
+     */
     class AddCommand extends Command{
 
         public AddCommand() {
             super("add");
         }
 
+        /**
+         * Hozzá ad egy kábelt a modellhez
+         * @param modelManager a model amin dolgozik
+         * @param cmd a bemeneti parancs
+         */
         @Override
         public void action(ModelManager modelManager, String[] cmd) {
             try {
                 modelManager.addCable(cmd[2],cmd[3]);
-            } catch (NoFreeInputSocketException | DeviceNotFoundException e) {
-                e.printStackTrace();
+            } catch (NoFreeInputSocketException | DeviceNotFoundException | NoFreeOutputSocketException e) {
+                System.err.println(e.getMessage());
             }
         }
     }
+
+    /**
+     * Kábel eltávolítás command
+     */
     class RemoveCommand extends Command{
 
         public RemoveCommand() {
             super("remove");
         }
 
+        /**
+         * Kábel eltávolítás
+         * @param modelManager a model amin dolgozik
+         * @param cmd a bemeneti parancs
+         */
         @Override
         public void action(ModelManager modelManager, String[] cmd) {
             try {
