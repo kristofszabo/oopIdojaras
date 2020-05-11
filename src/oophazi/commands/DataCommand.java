@@ -4,6 +4,7 @@ import oophazi.Data;
 import oophazi.Device;
 import oophazi.ModelManager;
 import oophazi.Sensor;
+import oophazi.exceptions.SensorNotFoundException;
 
 import java.util.HashMap;
 
@@ -18,7 +19,11 @@ public class DataCommand extends Command {
 
     @Override
     public void action(ModelManager modelManager, String[] cmd) {
-        commandHashMap.get(cmd[1]).action(modelManager,cmd);
+        if(commandHashMap.containsKey(cmd[1])){
+            commandHashMap.get(cmd[1]).action(modelManager,cmd);
+        }else{
+            System.out.println("Nincs ilyen másodlagos menüje a data menünek");
+        }
     }
 
     class SetCommand extends Command {
@@ -29,8 +34,13 @@ public class DataCommand extends Command {
 
         @Override
         public void action(ModelManager modelManager, String[] cmd) {
-            Device device = modelManager.findDeviceByName(cmd[2]);
-            device.receive(new Data((Sensor)device,Double.parseDouble(cmd[3])));
+            Sensor sensor = null;
+            try {
+                sensor = modelManager.findSensorByName(cmd[2]);
+            } catch (SensorNotFoundException e) {
+                System.out.println("A keresett sensor nem található");
+            }
+            sensor.receive(new Data(sensor,Double.parseDouble(cmd[3])));
         }
     }
 }

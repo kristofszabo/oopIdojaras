@@ -1,6 +1,9 @@
 package oophazi.commands;
 
 import oophazi.ModelManager;
+import oophazi.exceptions.CableNotFoundException;
+import oophazi.exceptions.DeviceNotFoundException;
+import oophazi.exceptions.NoFreeInputSocketException;
 
 import java.util.HashMap;
 
@@ -26,7 +29,11 @@ public class CableCommand extends Command {
 
         @Override
         public void action(ModelManager modelManager, String[] cmd) {
-            modelManager.addCable(cmd[2],cmd[3]);
+            try {
+                modelManager.addCable(cmd[2],cmd[3]);
+            } catch (NoFreeInputSocketException | DeviceNotFoundException e) {
+                e.printStackTrace();
+            }
         }
     }
     class RemoveCommand extends Command{
@@ -37,7 +44,11 @@ public class CableCommand extends Command {
 
         @Override
         public void action(ModelManager modelManager, String[] cmd) {
-            modelManager.removeCable(cmd[2], cmd[3]);
+            try {
+                modelManager.removeCable(cmd[2], cmd[3]);
+            } catch (CableNotFoundException | DeviceNotFoundException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

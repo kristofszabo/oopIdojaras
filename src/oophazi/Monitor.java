@@ -1,8 +1,11 @@
 package oophazi;
+import oophazi.exceptions.MonitorNotConnectedException;
+
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
- * 
+ * Egy megjelenítőt jelképező osztály
  */
 public class Monitor extends Device {
 
@@ -15,8 +18,33 @@ public class Monitor extends Device {
 
     }
 
-    @Override
+
+    /**
+     * Vissza adja a monitorhoz tartozó adatokat amelyek a 2 időpont között fordultak elő
+     *
+     * @param dateFrom Mettől
+     * @param dateTo Meddig
+     * @return Adatok listája
+     * @throws MonitorNotConnectedException
+     */
+    public ArrayList<Data> getStoredDataBetweenDates(LocalDateTime dateFrom, LocalDateTime dateTo) throws MonitorNotConnectedException {
+        if(canShowData()){
+            ArrayList<Data> datas=new ArrayList<>();
+            for (Data data:
+                    getStoredDatas()) {
+                if(data.getMeasuredTime().isAfter(dateFrom)&& data.getMeasuredTime().isBefore(dateTo)){
+                    datas.add(data);
+                }
+            }
+            return datas;
+        }else{
+            throw new MonitorNotConnectedException();
+        }
+
+    }
+
+
     public boolean canShowData() {
-        return true;
+        return getInputSockets()[0].getCable()!=null;
     }
 }

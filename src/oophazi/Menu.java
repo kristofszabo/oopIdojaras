@@ -9,10 +9,11 @@ import java.util.*;
 public class Menu {
 
     private HashMap<String, Command> commandHashMap;
+    private ModelManager modelManager;
     /**
      * Default constructor
      */
-    public Menu() {
+    public Menu(ModelManager manager) {
         commandHashMap = new HashMap<>();
         commandHashMap.put("data",new DataCommand());
         commandHashMap.put("device", new DeviceCommand());
@@ -22,10 +23,19 @@ public class Menu {
         commandHashMap.put("save", new SaveCommand());
         commandHashMap.put("setdatetime", new SetDateTimeCommand());
         commandHashMap.put("step", new StepCommand());
+        commandHashMap.put("cable", new CableCommand());
+
+        this.modelManager = manager;
     }
 
-    public void play(ModelManager modelManager, String[] cmd){
-        commandHashMap.get(cmd[0]).action(modelManager, cmd);
+    public void play(String[] cmd){
+        if(commandHashMap.containsKey(cmd[0])){
+            commandHashMap.get(cmd[0]).action(modelManager, cmd);
+
+        }else{
+            System.out.println("Az adott menüpont nem található a dokumentáció megtekintéséhez írja be a 'help' parancsot");
+        }
+
     }
 
 

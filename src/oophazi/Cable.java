@@ -3,7 +3,7 @@ import java.io.Serializable;
 import java.util.*;
 
 /**
- * 
+ * Egy kábelt szimbolizáló osztály
  */
 public class Cable implements Serializable {
 
@@ -31,10 +31,12 @@ public class Cable implements Serializable {
     public Cable( Socket from,  Socket to) {
         socketFrom = from;
         socketTo = to;
+        from.setCable(this);
+        to.setCable(this);
     }
 
     /**
-     * 
+     * Tovább küldi a küldő adatait a fogadónak
      */
     public void send() {
         ArrayList<Data> datas = socketFrom.getOwner().getStoredDatas();
@@ -47,14 +49,15 @@ public class Cable implements Serializable {
     }
 
 
-    /**
+    /**Getter a cél aljzathoz
+     *
      * @return A cél aljzat
      */
     public Socket getSocketTo() {
         return socketTo;
     }
 
-    /**
+    /**Getter a forrás aljzathoz
      *
      * @return Forrás aljzat
      */

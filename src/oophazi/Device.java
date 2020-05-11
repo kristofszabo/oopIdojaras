@@ -3,16 +3,21 @@ import oophazi.exceptions.NoFreeInputSocketException;
 import oophazi.exceptions.NoFreeOutputSocketException;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
- * 
+ * Egy eszközt szimbolizáló osztály
  */
 public abstract class Device implements Serializable {
 
-
+    /**
+     * Bemeneti aljzatok száma
+     */
     private int inputSocketNumber;
-
+    /**
+     * Kimenetei aljzatok sázma
+     */
     private int outputSocketNumber;
 
 
@@ -42,10 +47,10 @@ public abstract class Device implements Serializable {
     private boolean isValidData = false;
 
     /**
-     * Default constructor
+     * Default constructor, ami privát
      */
     private Device() {
-        storedDatas = new ArrayList<>();
+
     }
 
     public boolean getIsValidData(){
@@ -53,12 +58,15 @@ public abstract class Device implements Serializable {
     }
 
 
-    /**Eszköz létrehozo konstruktor
+    /**
      *
-     * @param name Eszköz név
+     * @param name  Az eszköz neve
+     * @param inputSocketNumber Az eszköz bemeneti aljzatainak száma
+     * @param outputSocketNumber Az eszköz kimeneti aljzatainak száma
      */
     public Device(String name, int inputSocketNumber, int outputSocketNumber){
         this();
+        storedDatas= new ArrayList<>();
         this.name=name;
         this.inputSocketNumber= inputSocketNumber;
         this.outputSocketNumber = outputSocketNumber;
@@ -72,10 +80,10 @@ public abstract class Device implements Serializable {
         }
     }
 
-
-    /**Szabad bemeneti socket kérése
+    /**
      *
-     * @return Szabad bemeneti socket
+     * @return Szabad bemeneti aljzat
+     * @throws NoFreeInputSocketException
      */
     public Socket getFreeInputSocket() throws NoFreeInputSocketException {
         for (Socket socket : inputSockets) {
@@ -86,12 +94,13 @@ public abstract class Device implements Serializable {
         throw new NoFreeInputSocketException();
     }
 
-    /** Szabad kimeneti socket lekérése
+    /** Megnézi, hogy van e az eszközön szabad kimeneti aljzat és ha van vissza adja azt.
      *
-     * @return Szabad kimeneti socket
+     * @return Szabad kimeneti aljzat
+     * @throws NoFreeOutputSocketException
      */
     public Socket getFreeOutputSocket() throws NoFreeOutputSocketException {
-        for (Socket socket : inputSockets) {
+        for (Socket socket : outputSockets) {
             if (socket.getCable() == null) {
                 return socket;
             }
@@ -100,19 +109,24 @@ public abstract class Device implements Serializable {
     }
 
 
-    /**
+    /**Getter name-hez
+     *
      * @return name
      */
     public String getName() {
         return name;
     }
 
+    /**Setter name-hez
+     *
+     * @param name
+     */
     public void setName(String name) {
         this.name = name;
     }
 
     /**
-     * 
+     * Minden jelenleg rendelkezésre álló adat tovább küldése a kimeneti a kábeleken keresztül
      */
     public void send() {
         for (Data data:
@@ -120,23 +134,33 @@ public abstract class Device implements Serializable {
             for (Socket socket:
                  outputSockets) {
                 if(socket != null){
-                    socket.getCable().send();
+                    if(socket.getCable()!=null){
+                        socket.getCable().send();
+
+                    }
                 }
             }
         }
         isValidData=true;
         broadcastFinish();
 
-
     }
 
+
+    /**
+     * Minden eszköz értesítése, amely hozzá van kapcsolva az eszközhöz, hogy befejezte a küldést és
+     * ha tud akkor küldje tovább a kapott adatot.
+     */
     public void broadcastFinish(){
         for (Socket socket :
                 outputSockets) {
-            var notifiedOwner = socket.getCable().getSocketTo().getOwner();
-            if(notifiedOwner.canSend()){
-                notifiedOwner.send();
+            if(socket.getCable()!=null){
+                var notifiedOwner = socket.getCable().getSocketTo().getOwner();
+                if(notifiedOwner.canSend()){
+                    notifiedOwner.send();
+                }
             }
+
         }
     }
 
@@ -147,51 +171,45 @@ public abstract class Device implements Serializable {
         storedDatas.add(data);
     }
 
-    /**
+    /** Vissza adja, hogy minden előző eszköz elküldte már az adatát
      *
      * @return Minden inputba csatalakoztatott eszköz elkészült e már a küldéssel
      */
     public boolean canSend(){
         for (Socket socket:
                 inputSockets) {
-            if(!socket.getCable().getSocketFrom().getOwner().getIsValidData()){
-                return false;
+            if(socket.getCable()!=null){
+                if(!socket.getCable().getSocketFrom().getOwner().getIsValidData()){
+                    return false;
+                }
             }
         }
         return true;
     }
 
-    public boolean canShowData(){
-        return false;
-    }
 
-    public boolean canDetectChange(){
-        return true;//TODO
-    }
 
-    public ArrayList<Data> getStoredDataBetweenDates(Date dateFrom, Date dateTo){
-        ArrayList<Data> datas=new ArrayList<>();
-        for (Data data:
-             storedDatas) {
-            if(data.getMeasuredTime().after(dateFrom)&& data.getMeasuredTime().before(dateTo)){
-                datas.add(data);
-            }
-        }
-        return datas;
-    }
 
-    /**
+
+
+
+    /**setter a tárolt adatokhoz
+     *
      * @return storedDatas
      */
     public ArrayList<Data> getStoredDatas() {
         return storedDatas;
     }
 
+    /**
+     *
+     * @param b
+     */
     public void setIsValidData(boolean b){
         isValidData = b;
     }
 
-    /**
+    /**getter a bemeneti aljzatokhoz
      *
      * @return inputSockets
      */
@@ -199,7 +217,7 @@ public abstract class Device implements Serializable {
         return inputSockets;
     }
 
-    /**
+    /** Getter a kimeneti aljzatokhoz
      *
      * @return outputSockets
      */

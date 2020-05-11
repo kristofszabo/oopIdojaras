@@ -1,7 +1,5 @@
 package oophazi;
-import oophazi.exceptions.CableNotFoundException;
-import oophazi.exceptions.NoFreeInputSocketException;
-import oophazi.exceptions.NoFreeOutputSocketException;
+import oophazi.exceptions.*;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -27,6 +25,7 @@ public class ModelManager implements Serializable {
 
     public void setLocalDateTime(LocalDateTime localDateTime) {
         this.localDateTime = localDateTime;
+
     }
 
     /**
@@ -38,6 +37,12 @@ public class ModelManager implements Serializable {
         sensors = new ArrayList<>();
         cables = new ArrayList<>();
     }
+    public void load(ModelManager manager) {
+        devices = manager.devices;
+        monitors = manager.monitors;
+        sensors = manager.sensors;
+        cables = manager.cables;
+    }
 
 
 
@@ -45,21 +50,21 @@ public class ModelManager implements Serializable {
     /**
      * @param name A keresett eszköz neve
      */
-    public Device findDeviceByName(String name) {
+    public Device findDeviceByName(String name) throws DeviceNotFoundException {
         for (Device device:
              devices) {
             if(device.getName().equals(name)){
                 return device;
             }
         }
-        return null;//TODO: ERROR
+        throw new DeviceNotFoundException();
     }
 
     /**
      * @param from Az eszköz neve amely kimenetéhez csatlakozik a to
      * @param to Az eszköz neve amely bemenetére csatolja a from-t
      */
-    public void addCable(String from, String to) throws NoFreeInputSocketException {
+    public void addCable(String from, String to) throws NoFreeInputSocketException, DeviceNotFoundException {
         Cable cable = new Cable(findDeviceByName(from).getFreeOutputSocket(), findDeviceByName(to).getFreeInputSocket());
         cables.add(cable);
     }
@@ -68,7 +73,7 @@ public class ModelManager implements Serializable {
      * @param from Az eszköz amelyből kimegy a kábel
      * @param to Az eszköz amelybe bemegy a kábel
      */
-    public void removeCable(String from, String to) throws CableNotFoundException {
+    public void removeCable(String from, String to) throws CableNotFoundException, DeviceNotFoundException {
         Device fromDevice = findDeviceByName(from);
         Device toDevice = findDeviceByName(to);
         for (int i = 0; i < cables.size(); ++i){
@@ -108,12 +113,49 @@ public class ModelManager implements Serializable {
     /**
      * @param deviceName Az eszköz neve amelyet eltávolít a modellből.
      */
-    public void removeDevice(String deviceName) {
+    public void removeDevice(String deviceName) throws DeviceNotFoundException {
         Device device = findDeviceByName(deviceName);
-        devices.remove(device);
-        sensors.remove(device);
-        monitors.remove(device);
+        removeCablesFromDevice(device);
+        if(devices.contains(device)){
+            devices.remove(device);
+        }
+
+        if(sensors.contains(device)){
+            sensors.remove(device);
+        }
+
+        if(monitors.contains(device)){
+            monitors.remove(device);
+        }
         //TODO: ERROR
+    }
+
+    public void removeCablesFromDevice(Device device){
+        removeInputCablesFromDevice(device);
+        removeOutputCablesFromDevice(device);
+    }
+
+    private void removeInputCablesFromDevice(Device device){
+        for(Socket s: device.getOutputSockets()){
+            Cable c = s.getCable();
+            if(c!=null){
+                cables.remove(c);
+                c.getSocketFrom().setCable(null);
+                c.getSocketTo().setCable(null);
+            }
+        }
+    }
+
+
+    private void removeOutputCablesFromDevice(Device device){
+        for(Socket s: device.getInputSockets()){
+            Cable c = s.getCable();
+            if(c!=null){
+                cables.remove(c);
+                c.getSocketFrom().setCable(null);
+                c.getSocketTo().setCable(null);
+            }
+        }
     }
 
     @Override
@@ -126,6 +168,7 @@ public class ModelManager implements Serializable {
 
     public void step() {
         for(Sensor s: sensors){
+            s.setDataTime(localDateTime);
             s.send();
         }
         for (Device d:
@@ -134,23 +177,23 @@ public class ModelManager implements Serializable {
         }
     }
 
-    public Monitor findMonitorByName(String name){
+    public Monitor findMonitorByName(String name) throws MonitorNotFoundException {
         for (Monitor monitor:
              monitors) {
             if(monitor.getName().equals(name)){
                 return monitor;
             }
         }
-        return null;
+        throw new MonitorNotFoundException();
     }
 
-    public Sensor findSensorByName(String name){
+    public Sensor findSensorByName(String name) throws SensorNotFoundException {
         for (Sensor sensor:
                 sensors) {
             if(sensor.getName().equals(name)){
                 return sensor;
             }
         }
-        return null;
+        throw new SensorNotFoundException();
     }
 }

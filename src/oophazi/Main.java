@@ -1,36 +1,26 @@
 package oophazi;
 
+import oophazi.exceptions.DeviceNotFoundException;
 import oophazi.exceptions.NoFreeInputSocketException;
 
 import java.io.IOException;
+import java.util.Scanner;
 
 public class Main {
 
     public static void main(String[] args) {
-        System.out.println("Hello világ");
         ModelManager modelManager = new ModelManager();
-        modelManager.addDevice(new DataConcentrator("MyDataConcentrator"));
-        modelManager.addDevice(new DataStorage("MyDataStorage"));
-        try {
-            modelManager.addCable("MyDataConcentrator","MyDataStorage");
-        } catch (NoFreeInputSocketException e) {
-            e.printStackTrace();
+        Menu menu = new Menu(modelManager);
+        Scanner sc = new Scanner(System.in);
+        String[] cmd;
+        while(true){
+            cmd = sc.nextLine().split(" ");
+            if(cmd.length == 0){
+                System.out.print("Írjon be valamit a dokumentáció lekéréséhez írja be a help parancsot");
+            }
+            menu.play(cmd);
+            System.out.println(modelManager);
         }
 
-        modelManager.removeDevice("MyDataConcentrator");
-        FileManager fm = new FileManager(modelManager);
-
-        try {
-            fm.save("valami.ser");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            modelManager = FileManager.load("valami.ser");
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        System.out.println(modelManager);
     }
 }

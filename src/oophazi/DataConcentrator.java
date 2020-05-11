@@ -3,7 +3,7 @@ package oophazi;
 import java.util.ArrayList;
 
 /**
- *
+ * Egy adatkoncentrátor szimbolizáló osztály
  */
 public class DataConcentrator extends Device {
 

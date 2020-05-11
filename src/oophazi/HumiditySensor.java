@@ -2,7 +2,7 @@
 package oophazi;
 import java.util.*;
 /**
- * 
+ * Páratartalom mérő Sensor
  */
 public class HumiditySensor extends Sensor {
 

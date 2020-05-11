@@ -11,12 +11,15 @@ public class FileManager {
 
     /**
      * Default constructor
+     *
+     * Beállítja a file managerhez tartozó alap ModelManager-t
      */
     public FileManager(ModelManager modelManager) {
         this.modelManager = modelManager;
     }
 
-    /**
+    /** Lementi az egész aktuális modelManagert a megadott fájlba
+     *
      * @param fileName A létrehozandó fájl neve
      */
     public void save(String fileName) throws IOException {
@@ -25,7 +28,9 @@ public class FileManager {
         oos.close();
     }
 
-    /**
+    /**Vissza ad egy ser fileból kinyert ModelManagert
+     *
+     *
      * @param filename A betöltendő file neve
      * @return A betöltött ModelManager példány
      */

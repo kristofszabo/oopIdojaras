@@ -1,26 +1,27 @@
 package oophazi;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
- * 
+ * Egy adatot szimbolizáló osztály
  */
 public class Data implements Serializable {
 
     /**
-     *  Sensor device that measured this Data
+     *  Az adat tulaja aki mérte ezt az adatot
      */
     private Sensor sensor;
 
     /**
-     *  Value of the sensor
+     *  A mért érték
      */
     private double value;
 
     /**
-     *  The time when the value was measured
+     *  Az idő, amikor mérve lett az adat
      */
-    private Date measuredTime;
+    private LocalDateTime measuredTime;
 
     /**
      * Default constructor
@@ -35,7 +36,7 @@ public class Data implements Serializable {
 
 
     /**
-     * sensor getter
+     * Getter a tulajdonos sensorhoz
      *
      * @return sensor
      */
@@ -44,7 +45,7 @@ public class Data implements Serializable {
     }
 
 
-    /**Value getter
+    /**Getter a mért értékhez
      *
      * @return value
      */
@@ -53,19 +54,19 @@ public class Data implements Serializable {
     }
 
     /**
-     * measuredTime getter
+     * Getter a mérés időpontjához
      *
      * @return measuredTime
      */
-    public Date getMeasuredTime() {
+    public LocalDateTime getMeasuredTime() {
         return measuredTime;
     }
 
-    /**measuredTime setter
+    /**Setter a mérés időpontjához
      *
      * @param measuredTime when the data was measured
      */
-    public void setMeasuredTime(Date measuredTime) {
+    public void setMeasuredTime(LocalDateTime measuredTime) {
         this.measuredTime = measuredTime;
     }
 }

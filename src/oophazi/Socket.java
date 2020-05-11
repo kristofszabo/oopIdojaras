@@ -23,12 +23,12 @@ public class Socket implements Serializable {
 
 
     /**
-     * 
+     *  A kábel, aminek az 1ik része csatlakoztatva van az aljzatba.
      */
     private Cable cable;
 
     /**
-     * 
+     * Az eszköz, amihez az aljzat tartozik.
      */
     private Device owner;
 

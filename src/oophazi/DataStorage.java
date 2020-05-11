@@ -2,7 +2,7 @@ package oophazi;
 import java.util.*;
 
 /**
- * 
+ * Egy adat tárolót szimbolizáló eszköz
  */
 public class DataStorage extends Device {
 

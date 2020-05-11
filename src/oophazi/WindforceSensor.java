@@ -2,7 +2,7 @@ package oophazi;
 import java.util.*;
 
 /**
- * 
+ * Egy szélerőt szimbolizáló osztály
  */
 public class WindforceSensor extends Sensor {
 

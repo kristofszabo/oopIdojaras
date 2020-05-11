@@ -12,10 +12,11 @@ public class LoadCommand extends Command {
 
     @Override
     public void action(ModelManager modelManager, String[] cmd) {
+        FileManager fm = new FileManager(modelManager);
         try {
-            modelManager = FileManager.load(cmd[1]);
+            modelManager.load(FileManager.load(cmd[1]));
         } catch (IOException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
