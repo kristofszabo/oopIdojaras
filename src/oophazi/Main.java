@@ -15,12 +15,17 @@ public class Main {
         String[] cmd;
         while(true){
             cmd = sc.nextLine().split(" ");
+            if(cmd.equals("exit")){
+                break;
+            }
             if(cmd.length == 0){
                 System.out.print("Írjon be valamit a dokumentáció lekéréséhez írja be a help parancsot");
             }
             menu.play(cmd);
+
             System.out.println(modelManager);
         }
+        sc.close();
 
     }
 }

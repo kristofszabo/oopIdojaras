@@ -10,13 +10,30 @@ import java.util.*;
  */
 public class ModelManager implements Serializable {
 
+    /**
+     * Az összes modellben megtalálható eszköz
+     */
     private ArrayList<Device> devices;
+
+    /**
+     * Az összes modellben megtalálható szenzor
+     */
     private ArrayList<Sensor> sensors;
+
+    /**
+     * Az összes modellben megtalálható monitor
+     */
     private ArrayList<Monitor> monitors;
 
+    /**
+     * Az összes modellben megtalálható kábel
+     */
     private ArrayList<Cable> cables;
 
 
+    /**
+     * A modell aktuális ideje
+     */
     private LocalDateTime localDateTime = LocalDateTime.now();
 
     public LocalDateTime getLocalDateTime() {
@@ -25,7 +42,21 @@ public class ModelManager implements Serializable {
 
     public void setLocalDateTime(LocalDateTime localDateTime) {
         this.localDateTime = localDateTime;
+    }
 
+    /**
+     * Végig nézi az eszközöket, hogy van e már eszköz ilyen névvel
+     *
+     * @param name név kikeresése
+     * @return igaz, ha van már ilyen név
+     */
+    public boolean checkIfNameExists(String name){
+        for(Device d: devices){
+            if(d.getName().equals(name)){
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -64,7 +95,7 @@ public class ModelManager implements Serializable {
      * @param from Az eszköz neve amely kimenetéhez csatlakozik a to
      * @param to Az eszköz neve amely bemenetére csatolja a from-t
      */
-    public void addCable(String from, String to) throws NoFreeInputSocketException, DeviceNotFoundException {
+    public void addCable(String from, String to) throws NoFreeInputSocketException, DeviceNotFoundException, NoFreeOutputSocketException {
         Cable cable = new Cable(findDeviceByName(from).getFreeOutputSocket(), findDeviceByName(to).getFreeInputSocket());
         cables.add(cable);
     }
@@ -93,21 +124,34 @@ public class ModelManager implements Serializable {
     /**
      * @param sensor Az érzékelő amelyet hozzá akarjuk adni a modellhez.
      */
-    public void addSensor(Sensor sensor) {
+    public void addSensor(Sensor sensor) throws NameCollisionException {
         addDevice(sensor);
         sensors.add(sensor);
     }
 
-    public void addMonitor(Monitor monitor){
+    public void addMonitor(Monitor monitor) throws NameCollisionException {
         addDevice(monitor);
         monitors.add(monitor);
     }
 
     /**
      * @param device Az eszköz amelyet hozzá akarunk adni a modellhez.
+     *
+     * @throws NameCollisionException ha van már ilyen nevű device
      */
-    public void addDevice(Device device) {
+    public void addDevice(Device device) throws NameCollisionException {
+        if(checkIfNameExists(device.getName())){
+            throw new NameCollisionException();
+        }
         devices.add(device);
+
+    }
+
+    public void updateDeviceName(String oldName, String newName) throws DeviceNotFoundException, NameCollisionException {
+        if(checkIfNameExists(newName)){
+            throw new NameCollisionException();
+        }
+        findDeviceByName(oldName).setName(newName);
     }
 
     /**
@@ -168,6 +212,8 @@ public class ModelManager implements Serializable {
 
     public void step() {
         for(Sensor s: sensors){
+
+            s.receive(new Data(s.getStoredDatas().get(0)));
             s.setDataTime(localDateTime);
             s.send();
         }
@@ -177,6 +223,12 @@ public class ModelManager implements Serializable {
         }
     }
 
+    /**
+     * Vissza ad egy monitort az adott néven
+     * @param name a monitor neve
+     * @return a monitor
+     * @throws MonitorNotFoundException ha nem talált monitort
+     */
     public Monitor findMonitorByName(String name) throws MonitorNotFoundException {
         for (Monitor monitor:
              monitors) {
@@ -187,6 +239,12 @@ public class ModelManager implements Serializable {
         throw new MonitorNotFoundException();
     }
 
+    /**
+     * Vissza adja, a szenzort az adott névvel
+     * @param name a keresendő szenzor neve
+     * @return a keresett szenzor
+     * @throws SensorNotFoundException ha nem talált ilyen szenzort
+     */
     public Sensor findSensorByName(String name) throws SensorNotFoundException {
         for (Sensor sensor:
                 sensors) {

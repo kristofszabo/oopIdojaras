@@ -119,7 +119,7 @@ public abstract class Device implements Serializable {
 
     /**Setter name-hez
      *
-     * @param name
+     * @param name eszköz új neve
      */
     public void setName(String name) {
         this.name = name;
@@ -145,6 +145,7 @@ public abstract class Device implements Serializable {
         broadcastFinish();
 
     }
+
 
 
     /**
@@ -203,7 +204,7 @@ public abstract class Device implements Serializable {
 
     /**
      *
-     * @param b
+     * @param b Valid e a benne szereplő adat
      */
     public void setIsValidData(boolean b){
         isValidData = b;

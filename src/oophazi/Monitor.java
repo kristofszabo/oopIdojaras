@@ -25,7 +25,7 @@ public class Monitor extends Device {
      * @param dateFrom Mettől
      * @param dateTo Meddig
      * @return Adatok listája
-     * @throws MonitorNotConnectedException
+     * @throws MonitorNotConnectedException Nincs semmilyen eszközhöz csatlakoztatva a monitor
      */
     public ArrayList<Data> getStoredDataBetweenDates(LocalDateTime dateFrom, LocalDateTime dateTo) throws MonitorNotConnectedException {
         if(canShowData()){

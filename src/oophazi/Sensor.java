@@ -20,6 +20,7 @@ public abstract class Sensor extends Device {
      */
     public Sensor(String name) {
         super(name,0,1);
+        getStoredDatas().add(new Data());
     }
 
     public void setDataTime(LocalDateTime localDateTime){

@@ -29,6 +29,12 @@ public class Data implements Serializable {
     public Data() {
     }
 
+    public Data(Data data){
+        this.value = data.value;
+        this.measuredTime = data.measuredTime;
+        this.sensor = data.sensor;
+    }
+
     public Data(Sensor sensor, double value){
         this.sensor = sensor;
         this.value = value;
