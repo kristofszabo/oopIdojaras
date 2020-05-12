@@ -13,4 +13,9 @@ public class HumiditySensor extends Sensor {
     public HumiditySensor(String name) {
         super(name);
     }
+
+    @Override
+    public String toString() {
+        return "HumiditySensor{}";
+    }
 }

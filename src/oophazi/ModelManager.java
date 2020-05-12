@@ -111,7 +111,10 @@ public class ModelManager implements Serializable {
      * @param from Az eszköz neve amely kimenetéhez csatlakozik a to
      * @param to Az eszköz neve amely bemenetére csatolja a from-t
      */
-    public void addCable(String from, String to) throws NoFreeInputSocketException, DeviceNotFoundException, NoFreeOutputSocketException {
+    public void addCable(String from, String to) throws NoFreeInputSocketException, DeviceNotFoundException, NoFreeOutputSocketException, CableExistsException {
+        if(isCableAlreadyExists(from,to)){
+            throw new CableExistsException();
+        }
         Cable cable = new Cable(findDeviceByName(from).getFreeOutputSocket(), findDeviceByName(to).getFreeInputSocket());
         cables.add(cable);
     }
@@ -136,6 +139,15 @@ public class ModelManager implements Serializable {
     }
 
 
+    public boolean isCableAlreadyExists(String from, String to){
+        for (Cable c:
+             cables) {
+            if(c.getSocketFrom().getOwner().getName().equals(from) && c.getSocketTo().getOwner().getName().equals(to)){
+                return true;
+            }
+        }
+        return false;
+    }
 
     /**
      * @param sensor Az érzékelő amelyet hozzá akarjuk adni a modellhez.
@@ -236,7 +248,11 @@ public class ModelManager implements Serializable {
         for (Device d:
              devices) {
             d.setIsValidData(false);
+            if(!d.canStoreData()){
+                d.clean();
+            }
         }
+
     }
 
     /**

@@ -23,6 +23,13 @@ public abstract class Sensor extends Device {
         getStoredDatas().add(new Data());
     }
 
+    @Override
+    public void clean() {
+        Data current = getStoredDatas().get(0);
+        super.clean();
+        getStoredDatas().add(current);
+    }
+
     public void setDataTime(LocalDateTime localDateTime){
         if(getStoredDatas().size()>0){
             getStoredDatas().get(0).setMeasuredTime(localDateTime);
@@ -33,4 +40,6 @@ public abstract class Sensor extends Device {
         getStoredDatas().set(0,data);
 
     }
+
+
 }

@@ -1,5 +1,6 @@
 package oophazi;
 import oophazi.commands.*;
+import oophazi.exceptions.MenuNotFoundException;
 
 import java.util.*;
 
@@ -28,12 +29,12 @@ public class Menu {
         this.modelManager = manager;
     }
 
-    public void play(String[] cmd){
+    public void play(String[] cmd) throws MenuNotFoundException {
         if(commandHashMap.containsKey(cmd[0])){
             commandHashMap.get(cmd[0]).action(modelManager, cmd);
 
         }else{
-            System.out.println("Az adott menüpont nem található a dokumentáció megtekintéséhez írja be a 'help' parancsot");
+            throw new MenuNotFoundException();
         }
 
     }

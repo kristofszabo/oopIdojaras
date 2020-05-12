@@ -1,6 +1,7 @@
 package oophazi;
 
 import oophazi.exceptions.DeviceNotFoundException;
+import oophazi.exceptions.MenuNotFoundException;
 import oophazi.exceptions.NoFreeInputSocketException;
 
 import java.io.IOException;
@@ -15,13 +16,17 @@ public class Main {
         String[] cmd;
         while(true){
             cmd = sc.nextLine().split(" ");
-            if(cmd.equals("exit")){
+            if(cmd[0].equals("exit")){
                 break;
             }
             if(cmd.length == 0){
                 System.out.print("Írjon be valamit a dokumentáció lekéréséhez írja be a help parancsot");
             }
-            menu.play(cmd);
+            try {
+                menu.play(cmd);
+            } catch (MenuNotFoundException e) {
+                System.out.println(e.getMessage());
+            }
 
             System.out.println(modelManager);
         }

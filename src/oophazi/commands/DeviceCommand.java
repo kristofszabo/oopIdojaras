@@ -107,6 +107,8 @@ public class DeviceCommand extends Command {
                         modelManager.addMonitor(monitorCreatorHashMap.get(cmd[2]).create(cmd[3]));
                     }else if(cmd[2].contains("Data")){
                         modelManager.addDevice(deviceCreatorHashMap.get(cmd[2]).create(cmd[3]));
+                    }else{
+                        System.err.println("Nincs ilyen típusú eszköz");
                     }
                 }catch (NameCollisionException e) {
                     System.err.println(e.getMessage());
@@ -185,7 +187,7 @@ public class DeviceCommand extends Command {
          */
         @Override
         public void action(ModelManager modelManager, String[] cmd) {
-            if(cmd.length <4){
+            if(cmd.length <5){
                 System.out.println("A parancs formátuma(dátum formátum:YYYY.MM.DD.): device filter eszköznév dátummikortól dátummeddig");
                 return;
             }

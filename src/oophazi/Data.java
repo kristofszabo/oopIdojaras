@@ -75,4 +75,13 @@ public class Data implements Serializable {
     public void setMeasuredTime(LocalDateTime measuredTime) {
         this.measuredTime = measuredTime;
     }
+
+
+    @Override
+    public String toString() {
+        return "Data:" +
+                "sensor=" + sensor.getName() +
+                ", value=" + value +
+                ", measuredTime=" + measuredTime;
+    }
 }

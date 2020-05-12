@@ -30,10 +30,17 @@ public class Monitor extends Device {
     public ArrayList<Data> getStoredDataBetweenDates(LocalDateTime dateFrom, LocalDateTime dateTo) throws MonitorNotConnectedException {
         if(canShowData()){
             ArrayList<Data> datas=new ArrayList<>();
-            for (Data data:
-                    getStoredDatas()) {
-                if(data.getMeasuredTime().isAfter(dateFrom)&& data.getMeasuredTime().isBefore(dateTo)){
-                    datas.add(data);
+            Socket socket = getInputSockets()[0];
+            Cable cable = socket.getCable();
+            Device storage;
+            if(cable!=null) {
+                storage = cable.getSocketFrom().getOwner();
+
+                for (Data data :
+                        storage.getStoredDatas()) {
+                    if (data.getMeasuredTime().isAfter(dateFrom) && data.getMeasuredTime().isBefore(dateTo)) {
+                        datas.add(data);
+                    }
                 }
             }
             return datas;
@@ -46,5 +53,10 @@ public class Monitor extends Device {
 
     public boolean canShowData() {
         return getInputSockets()[0].getCable()!=null;
+    }
+
+    @Override
+    public String toString() {
+        return "Monitor{}";
     }
 }

@@ -63,4 +63,11 @@ public class Cable implements Serializable {
      */
     public Socket getSocketFrom(){ return socketFrom;}
 
+
+    @Override
+    public String toString() {
+        return "Kábel: " +
+                "honnan =" + socketFrom.getOwner().getName() +
+                ", hova =" + socketTo.getOwner().getName();
+    }
 }

@@ -28,7 +28,7 @@ public class LoadCommand extends Command {
         try {
             modelManager.load(FileManager.load(cmd[1]));
         } catch (IOException e) {
-            System.out.println("N");
+            System.out.println(e.getMessage());
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }

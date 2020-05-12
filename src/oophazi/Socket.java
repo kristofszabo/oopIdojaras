@@ -53,4 +53,11 @@ public class Socket implements Serializable {
         return cable;
     }
 
+    @Override
+    public String toString() {
+        return "Socket{" +
+                "cable=" + cable +
+                ", owner=" + owner +
+                '}';
+    }
 }

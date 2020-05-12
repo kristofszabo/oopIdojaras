@@ -188,9 +188,17 @@ public abstract class Device implements Serializable {
         return true;
     }
 
+    public void clean(){
+        storedDatas.clear();
+    }
 
-
-
+    /**
+     * Vissza adja hogy az tud e tárolni adatot
+     * @return tud e?
+     */
+    public boolean canStoreData(){
+        return false;
+    }
 
 
 
