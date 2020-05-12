@@ -6,11 +6,17 @@ import oophazi.exceptions.NotEnoughParameterException;
 import java.util.*;
 
 /**
- * 
+ * A menüt megvalósító osztály
  */
 public class Menu {
 
+    /**
+     * A menü alap parancsait tároló map
+     */
     private HashMap<String, Command> commandHashMap;
+    /**
+     * A menühöz tartozó model
+     */
     private ModelManager modelManager;
     /**
      * Inicializálja a hash map-et amiben a parancsok vannak és beállítja az aktuálisan használt modellt

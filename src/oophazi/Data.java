@@ -81,7 +81,8 @@ public class Data implements Serializable {
     public String toString() {
         return
                 "Mérő eszköz neve: " + sensor.getName() +
-                ", mért érték: " + value +
-                ", mérés ideje: " + measuredTime;
+                "érték: " + value +
+                "ideje: " + measuredTime +
+                "mérték egység: " + sensor.getMeasure();
     }
 }

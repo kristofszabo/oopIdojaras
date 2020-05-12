@@ -7,12 +7,16 @@ import java.util.*;
 public class DataStorage extends Device {
 
     /**
-     * Default constructor
+     * Alap bemenet és kimeneti socketek beállítása
      */
     public DataStorage(String name) {
-        super(name,1,8);
+        super(name,1,100);
     }
 
+    /**
+     *
+     * @return true
+     */
     @Override
     public boolean canStoreData() {
         return true;

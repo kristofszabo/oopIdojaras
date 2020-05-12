@@ -11,7 +11,7 @@ public class TemperatureSensor extends Sensor {
      * @param name Eszköz név
      */
     public TemperatureSensor(String name) {
-        super(name);
+        super(name,"Celsius");
     }
 
     @Override

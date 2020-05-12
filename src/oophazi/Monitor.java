@@ -10,7 +10,7 @@ import java.util.*;
 public class Monitor extends Device {
 
     /**
-     * Default constructor
+     * Név és alap bemenet és kimenet számok beállítása
      */
     public Monitor(String name) {
         super(name,1,0);
@@ -51,6 +51,10 @@ public class Monitor extends Device {
     }
 
 
+    /**
+     *
+     * @return csatlakoztatva van e más eszközhöz
+     */
     public boolean canShowData() {
         return getInputSockets()[0].getCable()!=null;
     }

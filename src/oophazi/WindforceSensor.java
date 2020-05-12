@@ -11,7 +11,7 @@ public class WindforceSensor extends Sensor {
      * @param name Eszköz név
      */
     public WindforceSensor(String name) {
-        super(name);
+        super(name,"m/s");
     }
 
     @Override

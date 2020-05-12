@@ -17,6 +17,11 @@ public class MenuTest {
         menu=new Menu(new ModelManager());
     }
 
+    /**
+     * Menü tesztelés hiányzó bemenetre
+     * @throws MenuNotFoundException
+     * @throws NotEnoughParameterException
+     */
     @Test(expected = MenuNotFoundException.class)
     public void play() throws MenuNotFoundException, NotEnoughParameterException {
         String[] failCmd= {"kovász"};

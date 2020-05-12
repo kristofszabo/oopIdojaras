@@ -39,6 +39,9 @@ public class FileManagerTest {
         }
     }
 
+    /**
+     * Mentés és vissza töltés is ugyan annyi device-t ad vissza
+     */
     @Test
     public void save() {
         try {

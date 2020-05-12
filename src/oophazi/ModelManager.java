@@ -179,6 +179,14 @@ public class ModelManager implements Serializable {
 
     }
 
+    /**
+     * Módosítja egy eszköz nevét
+     *
+     * @param oldName Az eszköz eddigi neve
+     * @param newName Az eszköz új neve
+     * @throws DeviceNotFoundException Ha nem található az eszköz a régi név alapján
+     * @throws NameCollisionException Ha az új név ütközne bármelyik eddigivel
+     */
     public void updateDeviceName(String oldName, String newName) throws DeviceNotFoundException, NameCollisionException {
         if(checkIfNameExists(newName)){
             throw new NameCollisionException();
@@ -187,7 +195,10 @@ public class ModelManager implements Serializable {
     }
 
     /**
+     * Eszköz eltávolítása név alapján a  modellből
+     *
      * @param deviceName Az eszköz neve amelyet eltávolít a modellből.
+     * @throws DeviceNotFoundException Nem találta az eszközt
      */
     public void removeDevice(String deviceName) throws DeviceNotFoundException {
         Device device = findDeviceByName(deviceName);
@@ -205,11 +216,20 @@ public class ModelManager implements Serializable {
         }
     }
 
+    /**
+     * Összes kábel eltávolítása az eszközből
+     *
+     * @param device Amiből eltávolítjuk a kábeleket
+     */
     public void removeCablesFromDevice(Device device){
         removeInputCablesFromDevice(device);
         removeOutputCablesFromDevice(device);
     }
 
+    /**
+     * Összes bemeneti kábel eltávolítása az eszközből
+     * @param device Amely bemeneteiről eltávolítja a kábeleket
+     */
     private void removeInputCablesFromDevice(Device device){
         for(Socket s: device.getOutputSockets()){
             Cable c = s.getCable();
@@ -222,6 +242,11 @@ public class ModelManager implements Serializable {
     }
 
 
+    /**
+     * Összes kimeneti kábel eltávolítása az eszközből
+     *
+     * @param device Amely kimeneteiről eltávolítja a kábeleket
+     */
     private void removeOutputCablesFromDevice(Device device){
         for(Socket s: device.getInputSockets()){
             Cable c = s.getCable();
@@ -233,6 +258,9 @@ public class ModelManager implements Serializable {
         }
     }
 
+    /**
+     * Modell léptetése adatok tovább küldése
+     */
     public void step() {
         for(Sensor s: sensors){
 
@@ -245,6 +273,9 @@ public class ModelManager implements Serializable {
 
     }
 
+    /**
+     * Nem tároló eszköz adatainak törlése
+     */
     private void cleanModel(){
         for (Device d:
                 devices) {

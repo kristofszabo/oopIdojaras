@@ -10,7 +10,7 @@ public class RainSensor extends Sensor{
      * Default constructor
      */
     public RainSensor(String name) {
-        super(name);
+        super(name,"milimeter");
     }
 
 

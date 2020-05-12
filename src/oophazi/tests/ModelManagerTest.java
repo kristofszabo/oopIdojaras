@@ -5,12 +5,11 @@ import oophazi.DataStorage;
 import oophazi.ModelManager;
 import oophazi.RainSensor;
 import oophazi.exceptions.*;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 
 
 public class ModelManagerTest {
@@ -38,6 +37,9 @@ public class ModelManagerTest {
 
     }
 
+    /**
+     * Ha hozzá adunk egy sensort az a device listában és a sensor listában is szerepelnie kell
+     */
     @Test
     public void addDevice()  {
         try {
@@ -45,7 +47,7 @@ public class ModelManagerTest {
         } catch (NameCollisionException e) {
             System.err.println(e.getMessage());
         }
-        assertEquals(1,model.getDevices().size());
+        assertEquals(2,model.getDevices().size());
 
         try {
             model.addSensor(new RainSensor("rain"));
@@ -53,10 +55,14 @@ public class ModelManagerTest {
             System.err.println(e.getMessage());
         }
 
-        assertEquals(2,model.getDevices().size());
+        assertEquals(3,model.getDevices().size());
         assertEquals(1,model.getSensors().size());
     }
 
+
+    /**
+     * Eszköz hozzá adás és másik eltávolítás név alapján
+     */
     @Test
     public void removeDevice(){
         try {
@@ -64,19 +70,24 @@ public class ModelManagerTest {
         } catch (DeviceNotFoundException e) {
             System.err.println(e.getMessage());
         }
-        assertEquals(1, model.getDevices().size());
+        assertEquals(2, model.getDevices().size());
         try {
             model.removeDevice("myStorage");
         } catch (DeviceNotFoundException e) {
             System.err.println(e.getMessage());
         }
-        assertEquals(0, model.getDevices().size());
+        assertEquals(1, model.getDevices().size());
     }
 
 
+    /**
+     * Ha olyan kábelt akarunk találni aminek legalább egyik oldalán lévő eszköz hiányzik hibát kapunk
+     * @throws DeviceNotFoundException
+     * @throws CableNotFoundException
+     */
     @Test(expected = DeviceNotFoundException.class)
     public void cableRemove() throws DeviceNotFoundException, CableNotFoundException {
-        model.removeCable("sajt","kecske");
+        model.removeCable("garage","kecske");
 
     }
 

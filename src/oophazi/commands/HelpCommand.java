@@ -23,6 +23,7 @@ public class HelpCommand extends Command {
                 sb.append(sc.nextLine()+"\n");
             }
             System.out.println(sb.toString());
+            sc.close();
         } catch (FileNotFoundException e) {
             System.err.println("A help.txt fájlt nem tudta megnyitni a program");
         }

@@ -10,6 +10,10 @@ import java.util.*;
 public abstract class Sensor extends Device {
 
 
+    public String getMeasure() {
+        return measure;
+    }
+
     /**
      * Az érzékelő mértékegysége
      */
@@ -18,8 +22,9 @@ public abstract class Sensor extends Device {
     /**
      * @param name Eszköz név
      */
-    public Sensor(String name) {
+    public Sensor(String name,String measure) {
         super(name,0,1);
+        this.measure = measure;
         getStoredDatas().add(new Data());
     }
 

@@ -176,6 +176,9 @@ public abstract class Device implements Serializable {
         return true;
     }
 
+    /**
+     * Törli az eszközben lévő adatokat
+     */
     public void clean(){
         storedDatas.clear();
     }

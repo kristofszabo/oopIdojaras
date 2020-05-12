@@ -3,14 +3,14 @@ import java.io.Serializable;
 import java.util.*;
 
 /**
- * 
+ * Egy eszközön lévő aljzatot reprezentáló osztály
  */
 public class Socket implements Serializable {
 
     /**
-     * Default constructor
+     * Default private constructor
      */
-    public Socket() {
+    private Socket() {
     }
 
     /**
@@ -33,6 +33,8 @@ public class Socket implements Serializable {
     private Device owner;
 
     /**
+     * Getter a tulajdonoshoz
+     *
      * @return owner
      */
     public Device getOwner() {
@@ -40,6 +42,8 @@ public class Socket implements Serializable {
     }
 
     /**
+     * Setter a kábelhez
+     *
      * @param cable Kábel beállító
      */
     public void setCable(Cable cable) {

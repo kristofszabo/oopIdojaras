@@ -11,7 +11,7 @@ public class HumiditySensor extends Sensor {
      * @param name Eszköz név
      */
     public HumiditySensor(String name) {
-        super(name);
+        super(name,"g/m^3");
     }
 
     @Override
