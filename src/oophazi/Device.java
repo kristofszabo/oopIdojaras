@@ -11,15 +11,6 @@ import java.util.*;
  */
 public abstract class Device implements Serializable {
 
-    /**
-     * Bemeneti aljzatok száma
-     */
-    private int inputSocketNumber;
-    /**
-     * Kimenetei aljzatok sázma
-     */
-    private int outputSocketNumber;
-
 
     /**
      * Az eszközben lévő aktuális adatok
@@ -47,7 +38,7 @@ public abstract class Device implements Serializable {
     private boolean isValidData = false;
 
     /**
-     * Default constructor, ami privát
+     * Default constructor, ami privát, hogy név nélkül ne lehessen létrehozni eszközt
      */
     private Device() {
 
@@ -68,8 +59,6 @@ public abstract class Device implements Serializable {
         this();
         storedDatas= new ArrayList<>();
         this.name=name;
-        this.inputSocketNumber= inputSocketNumber;
-        this.outputSocketNumber = outputSocketNumber;
         outputSockets = new Socket[outputSocketNumber];
         for(int i = 0; i<outputSockets.length;++i){
             outputSockets[i]=new Socket(this);
@@ -83,7 +72,7 @@ public abstract class Device implements Serializable {
     /**
      *
      * @return Szabad bemeneti aljzat
-     * @throws NoFreeInputSocketException
+     * @throws NoFreeInputSocketException Nem talált üres bemeneti aljzatot
      */
     public Socket getFreeInputSocket() throws NoFreeInputSocketException {
         for (Socket socket : inputSockets) {
@@ -97,7 +86,7 @@ public abstract class Device implements Serializable {
     /** Megnézi, hogy van e az eszközön szabad kimeneti aljzat és ha van vissza adja azt.
      *
      * @return Szabad kimeneti aljzat
-     * @throws NoFreeOutputSocketException
+     * @throws NoFreeOutputSocketException Nem talált üres kimeneti aljzatot
      */
     public Socket getFreeOutputSocket() throws NoFreeOutputSocketException {
         for (Socket socket : outputSockets) {
@@ -129,18 +118,17 @@ public abstract class Device implements Serializable {
      * Minden jelenleg rendelkezésre álló adat tovább küldése a kimeneti a kábeleken keresztül
      */
     public void send() {
-        for (Data data:
-             storedDatas) {
-            for (Socket socket:
-                 outputSockets) {
-                if(socket != null){
-                    if(socket.getCable()!=null){
-                        socket.getCable().send();
 
-                    }
+        for (Socket socket:
+             outputSockets) {
+            if(socket != null){
+                if(socket.getCable()!=null){
+                    socket.getCable().send();
+
                 }
             }
         }
+
         isValidData=true;
         broadcastFinish();
 
@@ -236,14 +224,9 @@ public abstract class Device implements Serializable {
 
     @Override
     public String toString() {
-        return "Device{" +
-                "inputSocketNumber=" + inputSocketNumber +
-                ", outputSocketNumber=" + outputSocketNumber +
-                ", storedDatas=" + storedDatas +
-                ", inputSockets=" + Arrays.toString(inputSockets) +
-                ", outputSockets=" + Arrays.toString(outputSockets) +
-                ", name='" + name + '\'' +
-                ", isValidData=" + isValidData +
-                '}';
+        return "Eszköz neve: " + name + "\n" +
+                "tárolt adatok: " + storedDatas + "\n" +
+                "bemeneti aljzatok: " + Arrays.toString(inputSockets) + "\n" +
+                "kimeneti aljzatok: " + Arrays.toString(outputSockets);
     }
 }

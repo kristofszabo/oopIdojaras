@@ -13,4 +13,9 @@ public class TemperatureSensor extends Sensor {
     public TemperatureSensor(String name) {
         super(name);
     }
+
+    @Override
+    public String toString() {
+        return "(TemperatureSensor) " + super.toString();
+    }
 }

@@ -23,6 +23,9 @@ public abstract class Sensor extends Device {
         getStoredDatas().add(new Data());
     }
 
+    /**
+     * Új objektum elhelyezése a régi helyett
+     */
     @Override
     public void clean() {
         Data current = getStoredDatas().get(0);
@@ -30,6 +33,10 @@ public abstract class Sensor extends Device {
         getStoredDatas().add(current);
     }
 
+    /**
+     * Mérési idő megadása az adatnak
+     * @param localDateTime mérés ideje
+     */
     public void setDataTime(LocalDateTime localDateTime){
         if(getStoredDatas().size()>0){
             getStoredDatas().get(0).setMeasuredTime(localDateTime);

@@ -20,6 +20,6 @@ public class DataStorage extends Device {
 
     @Override
     public String toString() {
-        return "(DataStorage) " + getName();
+        return "(DataStorage) " + super.toString();
     }
 }

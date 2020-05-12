@@ -35,8 +35,12 @@ public class FileManager {
      * @return A betöltött ModelManager példány
      */
     public static ModelManager load(String filename) throws IOException, ClassNotFoundException {
+
         ObjectInputStream oin = new ObjectInputStream(new FileInputStream(filename));
-        return (ModelManager) oin.readObject();
+        ModelManager model =(ModelManager) oin.readObject();
+        oin.close();
+        return model;
+
     }
 
 }

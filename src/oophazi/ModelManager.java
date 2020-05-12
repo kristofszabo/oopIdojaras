@@ -2,6 +2,7 @@ package oophazi;
 import oophazi.exceptions.*;
 
 import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -115,6 +116,9 @@ public class ModelManager implements Serializable {
         if(isCableAlreadyExists(from,to)){
             throw new CableExistsException();
         }
+        if(from.equals(to)){
+            return;
+        }
         Cable cable = new Cable(findDeviceByName(from).getFreeOutputSocket(), findDeviceByName(to).getFreeInputSocket());
         cables.add(cable);
     }
@@ -199,7 +203,6 @@ public class ModelManager implements Serializable {
         if(monitors.contains(device)){
             monitors.remove(device);
         }
-        //TODO: ERROR
     }
 
     public void removeCablesFromDevice(Device device){
@@ -230,14 +233,6 @@ public class ModelManager implements Serializable {
         }
     }
 
-    @Override
-    public String toString() {
-        return "ModelManager{" +
-                "devices=" + devices +
-                ", cables=" + cables +
-                '}';
-    }
-
     public void step() {
         for(Sensor s: sensors){
 
@@ -245,14 +240,19 @@ public class ModelManager implements Serializable {
             s.setDataTime(localDateTime);
             s.send();
         }
+
+        cleanModel();
+
+    }
+
+    private void cleanModel(){
         for (Device d:
-             devices) {
+                devices) {
             d.setIsValidData(false);
             if(!d.canStoreData()){
                 d.clean();
             }
         }
-
     }
 
     /**
@@ -285,5 +285,27 @@ public class ModelManager implements Serializable {
             }
         }
         throw new SensorNotFoundException();
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Modellben szereplő információk:\n");
+        sb.append("Eszközök: \n");
+        for (Device d:
+             devices) {
+            sb.append(d);
+            sb.append("\n");
+        }
+        sb.append("Kábelek: \n");
+        for (Cable c :
+                cables) {
+            sb.append(c);
+
+            sb.append("\n");
+        }
+        sb.append("localDateTime=");
+        sb.append(localDateTime);
+        return sb.toString();
     }
 }

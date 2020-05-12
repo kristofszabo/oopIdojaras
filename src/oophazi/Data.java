@@ -79,9 +79,9 @@ public class Data implements Serializable {
 
     @Override
     public String toString() {
-        return "Data:" +
-                "sensor=" + sensor.getName() +
-                ", value=" + value +
-                ", measuredTime=" + measuredTime;
+        return
+                "Mérő eszköz neve: " + sensor.getName() +
+                ", mért érték: " + value +
+                ", mérés ideje: " + measuredTime;
     }
 }

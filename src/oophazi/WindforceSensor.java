@@ -13,4 +13,9 @@ public class WindforceSensor extends Sensor {
     public WindforceSensor(String name) {
         super(name);
     }
+
+    @Override
+    public String toString() {
+        return "(WindforceSensor) " + super.toString();
+    }
 }

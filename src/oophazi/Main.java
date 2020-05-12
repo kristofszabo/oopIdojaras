@@ -3,6 +3,7 @@ package oophazi;
 import oophazi.exceptions.DeviceNotFoundException;
 import oophazi.exceptions.MenuNotFoundException;
 import oophazi.exceptions.NoFreeInputSocketException;
+import oophazi.exceptions.NotEnoughParameterException;
 
 import java.io.IOException;
 import java.util.Scanner;
@@ -19,16 +20,16 @@ public class Main {
             if(cmd[0].equals("exit")){
                 break;
             }
-            if(cmd.length == 0){
-                System.out.print("Írjon be valamit a dokumentáció lekéréséhez írja be a help parancsot");
+            if(cmd[0].length() == 0){
+                System.out.print("A dokumentáció lekéréséhez írja be a help parancsot");
+                continue;
             }
             try {
                 menu.play(cmd);
-            } catch (MenuNotFoundException e) {
-                System.out.println(e.getMessage());
+            } catch (MenuNotFoundException | NotEnoughParameterException e) {
+                System.err.println(e.getMessage());
             }
 
-            System.out.println(modelManager);
         }
         sc.close();
 

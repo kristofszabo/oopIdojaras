@@ -57,6 +57,6 @@ public class Monitor extends Device {
 
     @Override
     public String toString() {
-        return "Monitor{}";
+        return "(Monitor) " + getName();
     }
 }

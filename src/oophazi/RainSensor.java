@@ -16,6 +16,6 @@ public class RainSensor extends Sensor{
 
     @Override
     public String toString() {
-        return "RainSensor{}";
+        return "(RainSensor) " + super.toString();
     }
 }

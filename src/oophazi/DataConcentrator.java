@@ -14,4 +14,9 @@ public class DataConcentrator extends Device {
         super(name, 8, 1);
     }
 
+
+    @Override
+    public String toString() {
+        return "(DataConcentrator) " + super.toString();
+    }
 }
