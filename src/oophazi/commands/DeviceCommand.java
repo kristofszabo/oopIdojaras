@@ -1,16 +1,11 @@
 package oophazi.commands;
 
-import oophazi.Device;
+import oophazi.Data;
 import oophazi.ModelManager;
 import oophazi.Monitor;
 import oophazi.creator.*;
-import oophazi.exceptions.DeviceNotFoundException;
-import oophazi.exceptions.MonitorNotConnectedException;
-import oophazi.exceptions.MonitorNotFoundException;
-import oophazi.exceptions.NameCollisionException;
+import oophazi.exceptions.*;
 
-import java.awt.datatransfer.SystemFlavorMap;
-import java.text.DateFormat;
 import java.time.DateTimeException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -30,6 +25,7 @@ public class DeviceCommand extends Command {
         commandHashMap.put("remove", new RemoveCommand());
         commandHashMap.put("update", new UpdateCommand());
         commandHashMap.put("filter", new FilterCommand());
+        commandHashMap.put("list", new ListCommand());
     }
 
     /**
@@ -39,8 +35,13 @@ public class DeviceCommand extends Command {
 
 
     @Override
-    public void action(ModelManager modelManager, String[] cmd) {
-        commandHashMap.get(cmd[1]).action(modelManager, cmd);
+    public void action(ModelManager modelManager, String[] cmd) throws NotEnoughParameterException, MenuNotFoundException {
+        if(commandHashMap.containsKey(cmd[1])){
+            commandHashMap.get(cmd[1]).action(modelManager, cmd);
+
+        }else{
+            throw new MenuNotFoundException();
+        }
     }
 
     /**
@@ -94,7 +95,10 @@ public class DeviceCommand extends Command {
          * @param cmd a bemeneti parancs
          */
         @Override
-        public void action(ModelManager modelManager, String[] cmd) {
+        public void action(ModelManager modelManager, String[] cmd) throws NotEnoughParameterException {
+            if(cmd.length<4){
+                throw new NotEnoughParameterException();
+            }
             if(
                     deviceCreatorHashMap.containsKey(cmd[2]) |
                     monitorCreatorHashMap.containsKey(cmd[2]) |
@@ -107,13 +111,13 @@ public class DeviceCommand extends Command {
                         modelManager.addMonitor(monitorCreatorHashMap.get(cmd[2]).create(cmd[3]));
                     }else if(cmd[2].contains("Data")){
                         modelManager.addDevice(deviceCreatorHashMap.get(cmd[2]).create(cmd[3]));
-                    }else{
-                        System.err.println("Nincs ilyen típusú eszköz");
                     }
                 }catch (NameCollisionException e) {
                     System.err.println(e.getMessage());
                 }
 
+            }else{
+                System.err.println("Nincs ilyen típusú eszköz");
             }
 
         }
@@ -186,10 +190,10 @@ public class DeviceCommand extends Command {
          * @param cmd A bemeneti parancs
          */
         @Override
-        public void action(ModelManager modelManager, String[] cmd) {
+        public void action(ModelManager modelManager, String[] cmd) throws NotEnoughParameterException {
             if(cmd.length <5){
                 System.out.println("A parancs formátuma(dátum formátum:YYYY.MM.DD.): device filter eszköznév dátummikortól dátummeddig");
-                return;
+                throw new NotEnoughParameterException();
             }
             try {
                 String[] from = cmd[3].split("\\.");
@@ -198,12 +202,27 @@ public class DeviceCommand extends Command {
                 LocalDateTime dateTo = LocalDateTime.of(Integer.parseInt(to[0]), Integer.parseInt(to[1]), Integer.parseInt(to[2]), 23, 59);
 
                 Monitor monitor = modelManager.findMonitorByName(cmd[2]);
-                System.out.println(monitor.getStoredDataBetweenDates(dateFrom,dateTo));
+                var datas = monitor.getStoredDataBetweenDates(dateFrom,dateTo);
+                for(Data d : datas){
+                    System.out.println(d);
+                }
             } catch (MonitorNotFoundException | MonitorNotConnectedException e) {
                 System.err.println(e.getMessage());
             }catch (DateTimeException e){
                 System.err.println(e.getMessage());
             }
+        }
+    }
+
+    static class ListCommand extends Command{
+
+        public ListCommand() {
+            super("list");
+        }
+
+        @Override
+        public void action(ModelManager modelManager, String[] cmd) throws NotEnoughParameterException {
+            System.out.println(modelManager);
         }
     }
 }

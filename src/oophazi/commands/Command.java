@@ -1,6 +1,8 @@
 package oophazi.commands;
 
 import oophazi.ModelManager;
+import oophazi.exceptions.MenuNotFoundException;
+import oophazi.exceptions.NotEnoughParameterException;
 
 import java.io.IOException;
 
@@ -18,5 +20,5 @@ public abstract class Command {
         this.name = name;
     }
 
-    public abstract void action(ModelManager modelManager, String[] cmd);
+    public abstract void action(ModelManager modelManager, String[] cmd) throws NotEnoughParameterException, MenuNotFoundException;
 }

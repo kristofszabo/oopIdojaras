@@ -3,6 +3,7 @@ package oophazi.tests;
 import oophazi.Menu;
 import oophazi.ModelManager;
 import oophazi.exceptions.MenuNotFoundException;
+import oophazi.exceptions.NotEnoughParameterException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -17,7 +18,7 @@ public class MenuTest {
     }
 
     @Test(expected = MenuNotFoundException.class)
-    public void play() throws MenuNotFoundException {
+    public void play() throws MenuNotFoundException, NotEnoughParameterException {
         String[] failCmd= {"kovász"};
         menu.play(failCmd);
     }

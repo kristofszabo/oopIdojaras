@@ -4,6 +4,8 @@ import oophazi.Data;
 import oophazi.Device;
 import oophazi.ModelManager;
 import oophazi.Sensor;
+import oophazi.exceptions.MenuNotFoundException;
+import oophazi.exceptions.NotEnoughParameterException;
 import oophazi.exceptions.SensorNotFoundException;
 
 import java.util.HashMap;
@@ -26,11 +28,11 @@ public class DataCommand extends Command {
      * @param cmd a bemeneti parancs
      */
     @Override
-    public void action(ModelManager modelManager, String[] cmd) {
+    public void action(ModelManager modelManager, String[] cmd) throws NotEnoughParameterException, MenuNotFoundException {
         if(commandHashMap.containsKey(cmd[1])){
             commandHashMap.get(cmd[1]).action(modelManager,cmd);
         }else{
-            System.err.println("Nincs ilyen másodlagos menüje a data menünek");
+            throw new MenuNotFoundException();
         }
     }
 
@@ -47,7 +49,10 @@ public class DataCommand extends Command {
          * @param cmd a bemeneti parancs
          */
         @Override
-        public void action(ModelManager modelManager, String[] cmd) {
+        public void action(ModelManager modelManager, String[] cmd) throws NotEnoughParameterException, NumberFormatException {
+            if(cmd.length<4){
+                throw new NotEnoughParameterException();
+            }
             Sensor sensor = null;
             try {
                 sensor = modelManager.findSensorByName(cmd[2]);
@@ -55,7 +60,12 @@ public class DataCommand extends Command {
                 System.err.println(e.getMessage());
                 return;
             }
-            sensor.receive(new Data(sensor,Double.parseDouble(cmd[3])));
+            try{
+                sensor.receive(new Data(sensor,Double.parseDouble(cmd[3])));
+
+            }catch (NumberFormatException e){
+                System.err.println("Csak tizedes ponttal elválasztott számot adjon meg.");
+            }
         }
     }
 }

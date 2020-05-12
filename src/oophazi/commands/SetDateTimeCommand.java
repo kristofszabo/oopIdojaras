@@ -1,6 +1,7 @@
 package oophazi.commands;
 
 import oophazi.ModelManager;
+import oophazi.exceptions.NotEnoughParameterException;
 
 import java.time.DateTimeException;
 import java.time.LocalDate;
@@ -24,9 +25,9 @@ public class SetDateTimeCommand extends Command {
      *
      */
     @Override
-    public void action(ModelManager modelManager, String[] cmd) {
+    public void action(ModelManager modelManager, String[] cmd) throws NotEnoughParameterException {
         if(cmd.length <3){
-            System.out.println("Kevés paraméter helyes formátum: YYYY.MM.DD. hh:mm");
+            throw new NotEnoughParameterException();
         }
         String[] dates = cmd[1].split("\\.");
         if(dates.length<2){

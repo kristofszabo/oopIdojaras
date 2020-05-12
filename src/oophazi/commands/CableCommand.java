@@ -23,8 +23,13 @@ public class CableCommand extends Command {
      * @param cmd a bemeneti parancs
      */
     @Override
-    public void action(ModelManager modelManager, String[] cmd) {
-        commandHashMap.get(cmd[1]).action(modelManager, cmd);
+    public void action(ModelManager modelManager, String[] cmd) throws NotEnoughParameterException, MenuNotFoundException {
+        if(commandHashMap.containsKey(cmd[1])) {
+            commandHashMap.get(cmd[1]).action(modelManager, cmd);
+        }else{
+            throw new MenuNotFoundException();
+        }
+
     }
 
     /**
@@ -43,6 +48,9 @@ public class CableCommand extends Command {
          */
         @Override
         public void action(ModelManager modelManager, String[] cmd) {
+            if(cmd.length<4){
+
+            }
             try {
                 modelManager.addCable(cmd[2],cmd[3]);
             } catch (NoFreeInputSocketException | DeviceNotFoundException | NoFreeOutputSocketException | CableExistsException e) {
